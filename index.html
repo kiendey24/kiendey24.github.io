@@ -346,21 +346,23 @@
         </div>
 
         <ul id="newsList" class="news-list"></ul>
-        <div id="newsEmpty" class="news-empty" style="display:none;">
-          Chưa có bài cho chuyên mục này.
+        <div id="newsEmpty" class="news-empty">
+          Chưa có bài nào. Vào trang <strong>admin.html</strong> để thêm bài mới.
         </div>
       </section>
     </section>
   </main>
 
-  <!-- ===== SCRIPT ===== -->
+  <!-- DỮ LIỆU BÀI VIẾT -->
+  <script src="articles.js"></script>
+
+  <!-- ===== SCRIPT LOGIC ===== -->
   <script>
     // 👉 THAY bằng link Shopee affiliate của bạn
     const SHOPEE_URL = "https://shopee.vn/";
 
-    // 5 phút (ms)
-    const CLICK_COOLDOWN = 5 * 60 * 1000;
-    let lastOpenTime = 0; // reset mỗi lần tải trang
+    const CLICK_COOLDOWN = 5 * 60 * 1000; // 5 phút
+    let lastOpenTime = 0; // reset mỗi lần tải lại trang
 
     function openShopeeIfAllowed() {
       const now = Date.now();
@@ -372,37 +374,6 @@
 
     // BẤT KỲ click nào trên trang cũng kích Shopee nếu đủ 5 phút
     document.addEventListener("click", openShopeeIfAllowed);
-
-    // ===== DỮ LIỆU BÀI VIẾT =====
-    const articles = [
-      {
-        id: "1",
-        title: "Giá xăng giảm, giá hàng hóa có hạ nhiệt?",
-        date: "15/11/2025",
-        category: "Thời sự",
-        summary: "Sau nhiều lần điều chỉnh giá xăng, người dân trông chờ giá hàng hoá giảm theo.",
-        url: "post-1.html"
-      },
-      {
-        id: "2",
-        title: "Smartphone tầm trung đang cạnh tranh khốc liệt",
-        date: "15/11/2025",
-        category: "Công nghệ",
-        summary: "Nhiều mẫu máy mới ra mắt cấu hình mạnh, giá dễ tiếp cận.",
-        url: "post-2.html"
-      },
-      {
-        id: "3",
-        title: "Xu hướng ăn uống lành mạnh của giới trẻ",
-        date: "14/11/2025",
-        category: "Đời sống",
-        summary: "Giới trẻ chuyển sang tự nấu ăn, dùng thực phẩm organic nhiều hơn.",
-        url: "post-3.html"
-      }
-      // Khi bạn có bài Thể thao, Pháp luật thì thêm ở đây
-      // { id:"4", title:"...", category:"Thể thao", summary:"...", url:"post-4.html" },
-      // { id:"5", title:"...", category:"Pháp luật", summary:"...", url:"post-5.html" }
-    ];
 
     const newsListEl = document.getElementById("newsList");
     const newsEmptyEl = document.getElementById("newsEmpty");
@@ -427,7 +398,7 @@
       filtered.forEach(article => {
         const li = document.createElement("li");
         li.innerHTML = `
-          <a href="${article.url}" class="news-item">
+          <a href="article.html?id=${encodeURIComponent(article.id)}" class="news-item">
             <div class="news-title">${article.title}</div>
             <div class="news-meta-row">
               <div>${article.date}</div>
@@ -440,15 +411,13 @@
       });
     }
 
-    // Lọc theo chuyên mục ở sidebar trái
+    // Lọc theo chuyên mục
     categoryButtons.forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        // để click vào nút vẫn tính là click -> Shopee, không cần chặn
+      btn.addEventListener("click", () => {
         categoryButtons.forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         currentCategory = btn.getAttribute("data-cat");
         renderNewsList();
-        // không return false, để hành vi click chung vẫn hoạt động
       });
     });
 
