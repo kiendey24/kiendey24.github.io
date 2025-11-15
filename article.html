@@ -142,6 +142,19 @@
       margin-bottom: 0;
     }
 
+    /* ==== IMAGE EMBED ==== */
+    .image-wrapper {
+      border-radius: 16px;
+      overflow: hidden;
+      background: #f3f4f6;
+    }
+
+    .image-wrapper img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
     /* ==== VIDEO EMBED ==== */
     .video-wrapper {
       position: relative;
@@ -149,7 +162,6 @@
       height: 0;
       overflow: hidden;
       border-radius: 16px;
-      margin-bottom: 14px;
       background: #000;
     }
 
@@ -158,10 +170,85 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100% !important;
+      height: 100% !important;
       border: 0;
       border-radius: 16px;
+    }
+
+    /* ==== GALLERY (1 ô lớn + hàng nhỏ bên dưới) ==== */
+    .media-gallery {
+      margin-bottom: 16px;
+    }
+
+    .media-main {
+      width: 100%;
+    }
+
+    .media-main-item {
+      display: none;
+    }
+
+    .media-main-item.active {
+      display: block;
+    }
+
+    .media-thumbs {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      width: 100%; /* cùng chiều rộng với media-main */
+    }
+
+    .media-thumb {
+      flex: 1;
+      border-radius: 12px;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      background: transparent;
+      transition:
+        transform 0.16s ease,
+        box-shadow 0.16s ease;
+    }
+
+    .media-thumb:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(15,23,42,.25);
+    }
+
+    .media-thumb-inner {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #020617;
+      position: relative;
+    }
+
+    .media-thumb-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .media-thumb-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f9fafb;
+      font-size: 12px;
+      background: radial-gradient(circle at top left, #f97316, #b91c1c);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .media-thumb.active .media-thumb-inner {
+      outline: 2px solid #f97316;
+      outline-offset: 2px;
     }
 
     .related {
@@ -227,10 +314,14 @@
     // BẤT KỲ click nào trên trang cũng kích Shopee nếu đủ 5 phút
     document.addEventListener("click", openShopeeIfAllowed);
 
-    // Lấy ?id=... từ URL
     function getQueryParam(name) {
       const params = new URLSearchParams(window.location.search);
       return params.get(name);
+    }
+
+    function extractImgSrc(html) {
+      const match = html.match(/<img[^>]*src=["']([^"']+)["']/i);
+      return match ? match[1] : null;
     }
 
     const articleContainer = document.getElementById("articleContainer");
@@ -251,10 +342,71 @@
 
       document.title = article.title + " - TINGO NEWS";
 
-      const hasVideo = article.videoEmbed && article.videoEmbed.trim();
-      const videoHtml = hasVideo
-        ? `<div class="video-wrapper">${article.videoEmbed}</div>`
-        : "";
+      // Gom danh sách media: ưu tiên mediaEmbeds[], fallback imageEmbed / videoEmbed cũ
+      let mediaList = [];
+
+      if (Array.isArray(article.mediaEmbeds) && article.mediaEmbeds.length > 0) {
+        mediaList = article.mediaEmbeds.map(html => {
+          const lower = String(html).toLowerCase();
+          const kind = lower.includes("<img") ? "image" : "video";
+          const thumbSrc = extractImgSrc(html);
+          return { kind, html, thumbSrc };
+        });
+      } else {
+        if (article.imageEmbed && article.imageEmbed.trim()) {
+          const html = article.imageEmbed;
+          mediaList.push({
+            kind: "image",
+            html,
+            thumbSrc: extractImgSrc(html)
+          });
+        }
+        if (article.videoEmbed && article.videoEmbed.trim()) {
+          const html = article.videoEmbed;
+          mediaList.push({
+            kind: "video",
+            html,
+            thumbSrc: null
+          });
+        }
+      }
+
+      let galleryHtml = "";
+      if (mediaList.length > 0) {
+        const mainItemsHtml = mediaList.map((m, index) => `
+          <div class="media-main-item ${index === 0 ? "active" : ""}" data-index="${index}">
+            ${
+              m.kind === "image"
+                ? `<div class="image-wrapper">${m.html}</div>`
+                : `<div class="video-wrapper">${m.html}</div>`
+            }
+          </div>
+        `).join("");
+
+        const thumbsHtml = mediaList.map((m, index) => `
+          <button class="media-thumb ${index === 0 ? "active" : ""}"
+                  data-index="${index}" type="button">
+            <div class="media-thumb-inner">
+              ${
+                m.kind === "image" && m.thumbSrc
+                  ? `<img src="${m.thumbSrc}" alt="Media ${index + 1}" />`
+                  : `<div class="media-thumb-placeholder"><span>VIDEO ${index + 1}</span></div>`
+              }
+            </div>
+          </button>
+        `).join("");
+
+        galleryHtml = `
+          <div class="media-gallery">
+            <div class="media-main" id="mediaMain">
+              ${mainItemsHtml}
+            </div>
+            <div class="media-thumbs" id="mediaThumbs">
+              ${thumbsHtml}
+            </div>
+          </div>
+        `;
+      }
 
       articleContainer.innerHTML = `
         <div class="breadcrumb">
@@ -267,10 +419,31 @@
           <span>${article.category}</span>
         </div>
         <div class="article-body">
-          ${videoHtml}
+          ${galleryHtml}
           ${article.content}
         </div>
       `;
+
+      // Bắt sự kiện click thumbnail để đổi media
+      const thumbs = articleContainer.querySelectorAll(".media-thumb");
+      const mainItems = articleContainer.querySelectorAll(".media-main-item");
+
+      if (thumbs.length > 0 && mainItems.length > 0) {
+        thumbs.forEach(btn => {
+          btn.addEventListener("click", () => {
+            const idx = btn.getAttribute("data-index");
+
+            mainItems.forEach(el => el.classList.remove("active"));
+            thumbs.forEach(el => el.classList.remove("active"));
+
+            const target = articleContainer.querySelector(
+              `.media-main-item[data-index="${idx}"]`
+            );
+            if (target) target.classList.add("active");
+            btn.classList.add("active");
+          });
+        });
+      }
 
       // Gợi ý 2 bài khác (nếu có)
       const others = articles.filter(a => a.id !== article.id).slice(0, 2);
