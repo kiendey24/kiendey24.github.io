@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trang tin tức đơn giản</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      line-height: 1.6;
+    }
+    header {
+      background: #0d6efd;
+      color: #fff;
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h1 {
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+    header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 1.2fr 2fr;
+      gap: 20px;
+    }
+    @media (max-width: 800px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+    .sidebar, .content {
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .news-list {
+      list-style: none;
+    }
+    .news-item {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+    }
+    .news-item:last-child {
+      border-bottom: none;
+    }
+    .news-item-title {
+      font-weight: bold;
+      font-size: 15px;
+      color: #0d6efd;
+      text-decoration: none;
+    }
+    .news-item-title:hover {
+      text-decoration: underline;
+    }
+    .news-meta {
+      font-size: 12px;
+      color: #777;
+      margin-top: 4px;
+    }
+    .content h2 {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+    .content .meta {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 12px;
+    }
+    .content p {
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+    .placeholder {
+      color: #777;
+      font-size: 14px;
+    }
+
+    /* QUẢNG CÁO OVERLAY */
+    .ad-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    .ad-box {
+      background: #fff;
+      max-width: 400px;
+      width: 90%;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    .ad-title {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #ff5722;
+    }
+    .ad-product-name {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .ad-desc {
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: #444;
+    }
+    .ad-countdown {
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+    .ad-button {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: none;
+      background: #0d6efd;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .ad-note {
+      margin-top: 8px;
+      font-size: 11px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Bản Tin Hằng Ngày</h1>
+  <p>Tin ngắn – giao diện gọn – kèm affiliate Shopee</p>
+</header>
+
+<div class="container">
+  <!-- DANH SÁCH BÀI VIẾT -->
+  <aside class="sidebar">
+    <h2>Tin mới nhất</h2>
+    <ul class="news-list" id="newsList"></ul>
+  </aside>
+
+  <!-- NỘI DUNG BÀI VIẾT -->
+  <main class="content">
+    <div id="articleContent">
+      <p class="placeholder">
+        Hãy chọn một bài viết ở bên trái để xem nội dung.
+      </p>
+    </div>
+  </main>
+</div>
+
+<!-- OVERLAY QUẢNG CÁO -->
+<div class="ad-overlay" id="adOverlay">
+  <div class="ad-box">
+    <div class="ad-title">Ưu đãi Shopee dành cho bạn 🎁</div>
+    <div class="ad-product-name" id="adProductName"></div>
+    <div class="ad-desc" id="adProductDesc"></div>
+    <div class="ad-countdown">
+      Tự động mở sản phẩm sau <span id="countdown">3</span> giây...
+    </div>
+    <button class="ad-button" id="adOpenNow">Mở ngay</button>
+    <div class="ad-note">
+      Sau khi mở sản phẩm, lần sau vào bài này sẽ không hiện quảng cáo nữa.
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== DỮ LIỆU GIẢ LẬP BÀI VIẾT + LINK SHOPEE =====
+  // Thay các link Shopee dưới đây bằng link affiliate thật của bạn
+  const articles = [
+    {
+      id: '1',
+      title: 'Mẹo tiết kiệm chi tiêu gia đình trong thời bão giá',
+      date: '15/11/2025',
+      category: 'Kinh tế',
+      summary: 'Một vài mẹo đơn giản giúp bạn tối ưu chi tiêu hằng ngày.',
+      content: `
+        <p>Trong bối cảnh giá cả leo thang, việc quản lý chi tiêu thông minh là
+        điều rất quan trọng. Hãy bắt đầu bằng việc ghi chép lại toàn bộ khoản
+        thu – chi hằng tháng...</p>
+        <p>Bạn có thể tận dụng các app mua sắm, mã giảm giá và chương trình
+        hoàn xu để tối ưu số tiền bỏ ra mà vẫn đảm bảo chất lượng cuộc sống.</p>
+      `,
+      productName: 'Sổ tay ghi chép chi tiêu gia đình',
+      productDesc: 'Giúp bạn theo dõi chi tiêu mỗi ngày, nhỏ gọn, dễ mang theo.',
+      shopeeLink: 'https://shopee.vn/'
+    },
+    {
+      id: '2',
+      title: '5 phụ kiện không thể thiếu khi làm việc tại nhà',
+      date: '15/11/2025',
+      category: 'Công nghệ',
+      summary: 'Góc làm việc gọn gàng giúp bạn tập trung và làm việc hiệu quả hơn.',
+      content: `
+        <p>Làm việc tại nhà đã trở nên phổ biến, nhưng không phải ai cũng tối
+        ưu không gian làm việc của mình. Một chiếc giá đỡ laptop, ghế ngồi
+        êm ái hay đèn bàn đủ sáng sẽ giúp bạn cải thiện sức khỏe lẫn hiệu quả.</p>
+      `,
+      productName: 'Giá đỡ laptop gấp gọn',
+      productDesc: 'Nâng laptop ngang tầm mắt, hạn chế đau cổ và gù lưng.',
+      shopeeLink: 'https://shopee.vn/'
+    },
+    {
+      id: '3',
+      title: 'Bí quyết giữ sức khỏe khi làm việc văn phòng',
+      date: '14/11/2025',
+      category: 'Sức khỏe',
+      summary: 'Ngồi nhiều không tốt – nhưng chỉ cần vài thói quen nhỏ để cải thiện.',
+      content: `
+        <p>Nhân viên văn phòng thường phải ngồi nhiều giờ liền trước màn hình
+        máy tính. Hãy đặt báo thức đứng dậy vận động nhẹ mỗi 60 phút, uống
+        đủ nước và điều chỉnh chiều cao ghế – bàn làm việc hợp lý.</p>
+      `,
+      productName: 'Bình nước nhắc giờ uống',
+      productDesc: 'In sẵn mốc thời gian, giúp bạn uống đủ nước mỗi ngày.',
+      shopeeLink: 'https://shopee.vn/'
+    }
+  ];
+
+  const newsListEl = document.getElementById('newsList');
+  const articleContentEl = document.getElementById('articleContent');
+
+  const adOverlay = document.getElementById('adOverlay');
+  const adProductName = document.getElementById('adProductName');
+  const adProductDesc = document.getElementById('adProductDesc');
+  const countdownEl = document.getElementById('countdown');
+  const adOpenNowBtn = document.getElementById('adOpenNow');
+
+  let currentArticle = null;
+  let countdownTimer = null;
+
+  // ===== TẠO DANH SÁCH BÀI VIẾT =====
+  function renderNewsList() {
+    newsListEl.innerHTML = '';
+    articles.forEach(article => {
+      const li = document.createElement('li');
+      li.className = 'news-item';
+      li.innerHTML = `
+        <a class="news-item-title" href="javascript:void(0)">${article.title}</a>
+        <div class="news-meta">${article.date} · ${article.category}</div>
+      `;
+      li.addEventListener('click', () => openArticle(article.id));
+      newsListEl.appendChild(li);
+    });
+  }
+
+  // ===== HIỂN THỊ BÀI VIẾT =====
+  function openArticle(id) {
+    const article = articles.find(a => a.id === id);
+    if (!article) return;
+    currentArticle = article;
+
+    articleContentEl.innerHTML = `
+      <h2>${article.title}</h2>
+      <div class="meta">${article.date} · ${article.category}</div>
+      ${article.content}
+    `;
+
+    // Kiểm tra đã hiện quảng cáo cho bài này chưa
+    const adKey = 'ad_shown_' + id;
+    const adShown = localStorage.getItem(adKey);
+
+    if (!adShown) {
+      showAd(article, adKey);
+    }
+  }
+
+  // ===== HIỆN QUẢNG CÁO + TỰ ĐỘNG MỞ LINK SHOPEE =====
+  function showAd(article, adKey) {
+    adProductName.textContent = article.productName;
+    adProductDesc.textContent = article.productDesc;
+    adOverlay.style.display = 'flex';
+
+    let timeLeft = 3;
+    countdownEl.textContent = timeLeft;
+
+    // Đếm ngược
+    countdownTimer = setInterval(() => {
+      timeLeft--;
+      countdownEl.textContent = timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(countdownTimer);
+        openShopee(article, adKey);
+      }
+    }, 1000);
+
+    // Nút "Mở ngay" nếu người dùng muốn click luôn
+    adOpenNowBtn.onclick = () => {
+      clearInterval(countdownTimer);
+      openShopee(article, adKey);
+    };
+  }
+
+  function openShopee(article, adKey) {
+    // Đánh dấu là quảng cáo đã hiện cho bài này
+    localStorage.setItem(adKey, '1');
+
+    // Ẩn overlay
+    adOverlay.style.display = 'none';
+
+    // Mở link Shopee (affiliate) trong tab mới
+    // LƯU Ý: Một số trình duyệt có thể chặn popup nếu quá nghiêm ngặt.
+    window.open(article.shopeeLink, '_blank');
+  }
+
+  // Khởi tạo
+  renderNewsList();
+</script>
+</body>
+</html>
