@@ -5,7 +5,25 @@
   <title>TINGO NEWS - Fast · Convenient · Authentic</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <!-- Font gọn, hiện đại -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
   <style>
+    :root {
+      --primary: #d32f2f;
+      --primary-dark: #b71c1c;
+      --accent: #ff6f00;
+      --bg: #f3f4f6;
+      --text-main: #111827;
+      --text-sub: #6b7280;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --shadow-soft: 0 18px 45px rgba(15,23,42,.1);
+      --transition-fast: 180ms ease-out;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -13,458 +31,128 @@
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #222;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #fee2e2 0, #f3f4f6 45%, #e5e7eb 100%);
+      color: var(--text-main);
       line-height: 1.6;
+      min-height: 100vh;
     }
 
     /* ===== HEADER ===== */
     header {
-      background: #ffffff;
-      border-bottom: 3px solid #c62828;
-      padding: 10px 16px;
       position: sticky;
       top: 0;
-      z-index: 20;
+      z-index: 40;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(to right, rgba(255,255,255,.9), rgba(255,255,255,.9));
+      border-bottom: 1px solid rgba(209,213,219,.8);
     }
 
     .header-inner {
-      max-width: 1080px;
+      max-width: 1120px;
       margin: 0 auto;
+      padding: 10px 16px 8px;
       display: flex;
       align-items: center;
       gap: 14px;
       flex-wrap: wrap;
     }
 
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: linear-gradient(to right, #fee2e2, #e0f2fe);
+    }
+
     .logo {
-      height: 46px;
+      height: 44px;
       max-width: 220px;
+      display: block;
     }
 
     .header-text h1 {
       font-size: 22px;
-      margin-bottom: 2px;
+      letter-spacing: 0.06em;
     }
 
     .header-text p {
-      font-size: 13px;
-      color: #555;
+      font-size: 12px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-top: 2px;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 640px) {
       .logo {
-        height: 38px;
+        height: 34px;
       }
-
       .header-text h1 {
-        font-size: 19px;
+        font-size: 18px;
+      }
+      .header-inner {
+        justify-content: center;
       }
     }
 
     /* ===== THANH CHUYÊN MỤC ===== */
     .category-bar {
-      background: #c62828;
-      padding: 6px 12px;
       display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
       justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 8px 16px 12px;
+      border-top: 1px solid rgba(229,231,235,.8);
+      border-bottom: 1px solid rgba(229,231,235,.8);
+      background: radial-gradient(circle at top, #fee2e2 0, #ffffff 55%);
     }
 
     .cat-btn {
-      border: none;
-      background: rgba(255, 255, 255, 0.16);
-      color: #fff;
-      padding: 6px 12px;
+      border: 0;
+      background: #ffffff;
+      color: var(--text-sub);
+      padding: 6px 14px;
       font-size: 13px;
       border-radius: 999px;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 1px 4px rgba(15,23,42,.1);
+      transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .cat-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #e5e7eb;
+    }
+
+    .cat-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(15,23,42,.12);
     }
 
     .cat-btn.active {
-      background: #fff;
-      color: #b71c1c;
-      font-weight: bold;
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .cat-btn.active .cat-dot {
+      background: #fecaca;
     }
 
     /* ===== LAYOUT CHÍNH ===== */
+    .page-wrap {
+      padding: 20px 16px 32px;
+    }
+
     .container {
-      max-width: 1080px;
-      margin: 20px auto;
-      padding: 0 16px;
+      max-width: 1120px;
+      margin: 0 auto;
       display: grid;
-      grid-template-columns: 1.4fr 2fr;
-      gap: 20px;
-    }
-
-    @media (max-width: 900px) {
-      .container {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 8px;
-      padding: 16px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-    }
-
-    /* ===== DANH SÁCH TIN ===== */
-    .sidebar h2 {
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-
-    .news-list {
-      list-style: none;
-    }
-
-    .news-item {
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
-      cursor: pointer;
-    }
-
-    .news-item:last-child {
-      border-bottom: none;
-    }
-
-    .news-title {
-      font-weight: bold;
-      font-size: 15px;
-      text-decoration: none;
-      color: #222;
-    }
-
-    .news-title:hover {
-      color: #c62828;
-    }
-
-    .news-meta {
-      font-size: 12px;
-      color: #777;
-      margin-top: 3px;
-    }
-
-    .news-summary {
-      font-size: 13px;
-      color: #555;
-      margin-top: 4px;
-    }
-
-    /* ===== NỘI DUNG BÀI ===== */
-    .content h2 {
-      font-size: 20px;
-      margin-bottom: 6px;
-    }
-
-    .content .meta {
-      font-size: 13px;
-      color: #888;
-      margin-bottom: 12px;
-    }
-
-    .content p {
-      margin-bottom: 10px;
-      font-size: 15px;
-    }
-
-    .placeholder {
-      font-size: 14px;
-      color: #777;
-    }
-
-    /* ===== OVERLAY QUẢNG CÁO ===== */
-    .ad-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-
-    .ad-box {
-      background: #fff;
-      max-width: 420px;
-      width: 90%;
-      padding: 18px 16px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-    }
-
-    .ad-title {
-      font-size: 18px;
-      margin-bottom: 10px;
-      color: #ff5722;
-    }
-
-    .ad-product-name {
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    .ad-desc {
-      font-size: 14px;
-      margin-bottom: 10px;
-      color: #444;
-    }
-
-    .ad-countdown {
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
-
-    .ad-button {
-      padding: 8px 16px;
-      border-radius: 6px;
-      border: none;
-      background: #ff6f00;
-      color: #fff;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .ad-note {
-      margin-top: 6px;
-      font-size: 11px;
-      color: #777;
-    }
-  </style>
-</head>
-
-<body>
-  <!-- ===== HEADER ===== -->
-  <header>
-    <div class="header-inner">
-      <!-- Đảm bảo file logo-tingo.jpg nằm cùng thư mục với index.html -->
-      <img src="logo-tingo.jpg" alt="TINGO Logo" class="logo">
-      <div class="header-text">
-        <h1>TINGO NEWS</h1>
-        <p>FAST · CONVENIENT · AUTHENTIC – Tin tức chọn lọc mỗi ngày</p>
-      </div>
-    </div>
-  </header>
-
-  <!-- ===== THANH CHUYÊN MỤC ===== -->
-  <nav class="category-bar">
-    <button class="cat-btn active" data-cat="all">Tất cả</button>
-    <button class="cat-btn" data-cat="Thời sự">Thời sự</button>
-    <button class="cat-btn" data-cat="Công nghệ">Công nghệ</button>
-    <button class="cat-btn" data-cat="Đời sống">Đời sống</button>
-  </nav>
-
-  <!-- ===== LAYOUT CHÍNH ===== -->
-  <div class="container">
-    <!-- SIDEBAR: DANH SÁCH TIN -->
-    <aside class="card sidebar">
-      <h2>Tin mới</h2>
-      <ul id="newsList" class="news-list"></ul>
-    </aside>
-
-    <!-- CONTENT: NỘI DUNG BÀI -->
-    <main class="card content">
-      <div id="articleContent">
-        <p class="placeholder">
-          Chọn một bài viết ở danh sách <strong>Tin mới</strong> bên trái để đọc nội dung.
-        </p>
-      </div>
-    </main>
-  </div>
-
-  <!-- ===== OVERLAY QUẢNG CÁO SHOPEE ===== -->
-  <div id="adOverlay" class="ad-overlay">
-    <div class="ad-box">
-      <div class="ad-title">Ưu đãi Shopee dành cho bạn 🎁</div>
-      <div id="adProductName" class="ad-product-name"></div>
-      <div id="adProductDesc" class="ad-desc"></div>
-      <div class="ad-countdown">
-        Tự động mở sản phẩm sau <span id="countdown">3</span> giây...
-      </div>
-      <button id="adOpenNow" class="ad-button">Mở ngay</button>
-      <div class="ad-note">
-        Sau khi mở sản phẩm, lần sau vào bài này sẽ không hiện quảng cáo nữa.
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== SCRIPT ===== -->
-  <script>
-    // ===== DANH SÁCH BÀI VIẾT (THAY BẰNG BÀI THẬT CỦA BẠN) =====
-    // Nhớ sửa shopeeLink thành link affiliate thật.
-    const articles = [
-      {
-        id: '1',
-        title: 'Giá xăng giảm, giá hàng hóa có hạ nhiệt?',
-        date: '15/11/2025',
-        category: 'Thời sự',
-        summary: 'Sau nhiều lần điều chỉnh giá xăng, người dân trông chờ giá hàng hoá giảm theo.',
-        content: `
-          <p>Sau kỳ điều chỉnh mới đây, giá xăng trong nước đã giảm nhẹ, tạo kỳ vọng
-          giá hàng hóa thiết yếu sẽ hạ nhiệt theo. Tuy nhiên, trên thực tế, nhiều
-          mặt hàng vẫn giữ nguyên mức giá cũ.</p>
-          <p>Chuyên gia cho rằng cần thêm thời gian để doanh nghiệp điều chỉnh chi
-          phí, và người tiêu dùng nên chủ động so sánh giá, tận dụng chương trình
-          khuyến mãi khi mua sắm.</p>
-        `,
-        productName: 'Combo nhu yếu phẩm giảm giá trên Shopee',
-        productDesc: 'Gói combo dầu ăn, nước mắm, mì gói… tiết kiệm so với mua lẻ.',
-        shopeeLink: 'https://shopee.vn/'
-      },
-      {
-        id: '2',
-        title: 'Smartphone tầm trung đang cạnh tranh khốc liệt',
-        date: '15/11/2025',
-        category: 'Công nghệ',
-        summary: 'Nhiều mẫu máy mới ra mắt cấu hình mạnh, giá dễ tiếp cận.',
-        content: `
-          <p>Phân khúc smartphone tầm trung đang chứng kiến cuộc đua cấu hình
-          và camera giữa các hãng lớn. Người dùng có nhiều lựa chọn với mức
-          giá dưới 7 triệu nhưng vẫn sở hữu màn hình đẹp, pin trâu.</p>
-          <p>Các chương trình giảm giá, trả góp 0% và quà tặng kèm theo cũng là
-          yếu tố thu hút người mua trong giai đoạn cuối năm.</p>
-        `,
-        productName: 'Điện thoại tầm trung hot trên Shopee',
-        productDesc: 'Máy chính hãng, hỗ trợ trả góp, nhiều mã giảm giá.',
-        shopeeLink: 'https://shopee.vn/'
-      },
-      {
-        id: '3',
-        title: 'Xu hướng ăn uống lành mạnh của giới trẻ',
-        date: '14/11/2025',
-        category: 'Đời sống',
-        summary: 'Giới trẻ chuyển sang tự nấu ăn, dùng thực phẩm organic nhiều hơn.',
-        content: `
-          <p>Ngày càng nhiều bạn trẻ quan tâm đến chế độ ăn lành mạnh để giữ dáng
-          và cải thiện sức khỏe. Các món salad, sinh tố, ngũ cốc nguyên hạt được
-          ưa chuộng hơn đồ ăn nhanh.</p>
-          <p>Các cửa hàng thực phẩm sạch, đồ bếp tiện lợi và hộp đựng meal prep
-          bán rất chạy trên các sàn thương mại điện tử.</p>
-        `,
-        productName: 'Bộ hộp thủy tinh meal-prep',
-        productDesc: 'Chia khẩu phần ăn cho cả tuần, an toàn trong lò vi sóng.',
-        shopeeLink: 'https://shopee.vn/'
-      }
-    ];
-
-    const newsListEl = document.getElementById('newsList');
-    const articleContentEl = document.getElementById('articleContent');
-
-    const adOverlay = document.getElementById('adOverlay');
-    const adProductName = document.getElementById('adProductName');
-    const adProductDesc = document.getElementById('adProductDesc');
-    const countdownEl = document.getElementById('countdown');
-    const adOpenNowBtn = document.getElementById('adOpenNow');
-
-    const categoryButtons = document.querySelectorAll('.cat-btn');
-
-    let currentCategory = 'all';
-    let countdownTimer = null;
-
-    // ===== RENDER LIST TIN =====
-    function renderNewsList() {
-      newsListEl.innerHTML = '';
-
-      const filtered = articles.filter(article => {
-        if (currentCategory === 'all') return true;
-        return article.category === currentCategory;
-      });
-
-      if (filtered.length === 0) {
-        newsListEl.innerHTML = '<li class="news-item">Chưa có bài viết cho chuyên mục này.</li>';
-        return;
-      }
-
-      filtered.forEach(article => {
-        const li = document.createElement('li');
-        li.className = 'news-item';
-        li.innerHTML = `
-          <a class="news-title" href="javascript:void(0)">${article.title}</a>
-          <div class="news-meta">${article.date} · ${article.category}</div>
-          <div class="news-summary">${article.summary}</div>
-        `;
-        li.addEventListener('click', () => openArticle(article.id));
-        newsListEl.appendChild(li);
-      });
-    }
-
-    // ===== CHỌN CHUYÊN MỤC =====
-    categoryButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        categoryButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentCategory = btn.getAttribute('data-cat');
-
-        articleContentEl.innerHTML = `
-          <p class="placeholder">
-            Chọn một bài viết trong chuyên mục
-            <strong>${currentCategory === 'all' ? 'Tất cả' : currentCategory}</strong> để đọc.
-          </p>
-        `;
-
-        renderNewsList();
-      });
-    });
-
-    // ===== MỞ BÀI VIẾT =====
-    function openArticle(id) {
-      const article = articles.find(a => a.id === id);
-      if (!article) return;
-
-      articleContentEl.innerHTML = `
-        <h2>${article.title}</h2>
-        <div class="meta">${article.date} · ${article.category}</div>
-        ${article.content}
-      `;
-
-      const adKey = 'tingo_ad_shown_' + id;
-      const adShown = localStorage.getItem(adKey);
-
-      if (!adShown) {
-        showAd(article, adKey);
-      }
-    }
-
-    // ===== HIỆN QUẢNG CÁO + ĐẾM NGƯỢC =====
-    function showAd(article, adKey) {
-      adProductName.textContent = article.productName;
-      adProductDesc.textContent = article.productDesc;
-      adOverlay.style.display = 'flex';
-
-      let timeLeft = 3;
-      countdownEl.textContent = timeLeft;
-
-      countdownTimer = setInterval(() => {
-        timeLeft--;
-        countdownEl.textContent = timeLeft;
-        if (timeLeft <= 0) {
-          clearInterval(countdownTimer);
-          openShopee(article, adKey);
-        }
-      }, 1000);
-
-      adOpenNowBtn.onclick = () => {
-        clearInterval(countdownTimer);
-        openShopee(article, adKey);
-      };
-    }
-
-    function openShopee(article, adKey) {
-      // Đánh dấu đã show quảng cáo cho bài này
-      localStorage.setItem(adKey, '1');
-      adOverlay.style.display = 'none';
-
-      // Mở link affiliate
-      window.open(article.shopeeLink, '_blank');
-    }
-
-    // ===== KHỞI TẠO =====
-    renderNewsList();
-  </script>
-</body>
-</html>
+      grid-template-
