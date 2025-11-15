@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Trang tin tức đơn giản</title>
+  <title>TINGO NEWS - Trang tin tức</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     * {
@@ -12,35 +12,84 @@
     }
     body {
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      background: #f4f4f4;
       color: #222;
       line-height: 1.6;
     }
     header {
-      background: #0d6efd;
-      color: #fff;
-      padding: 16px 24px;
+      background: #ffffff;
+      border-bottom: 3px solid #c62828;
+      padding: 10px 18px;
       position: sticky;
       top: 0;
       z-index: 10;
     }
-    header h1 {
+    .header-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo {
+      height: 46px;
+      max-width: 200px;
+    }
+    .header-text h1 {
       font-size: 22px;
-      margin-bottom: 4px;
+      color: #111;
+      margin-bottom: 2px;
     }
-    header p {
-      font-size: 14px;
-      opacity: 0.9;
+    .header-text p {
+      font-size: 13px;
+      color: #444;
     }
+    @media (max-width: 600px) {
+      .header-inner {
+        flex-wrap: wrap;
+      }
+      .logo {
+        height: 38px;
+      }
+      .header-text h1 {
+        font-size: 19px;
+      }
+    }
+
+    /* THANH CHUYÊN MỤC */
+    .category-bar {
+      background: #c62828;
+      padding: 6px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+    }
+    .cat-btn {
+      border: none;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      padding: 6px 10px;
+      font-size: 13px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .cat-btn.active {
+      background: #fff;
+      color: #b71c1c;
+      font-weight: bold;
+    }
+
+    /* LAYOUT CHUNG */
     .container {
-      max-width: 1000px;
+      max-width: 1080px;
       margin: 20px auto;
       padding: 0 16px;
       display: grid;
-      grid-template-columns: 1.2fr 2fr;
+      grid-template-columns: 1.4fr 2fr;
       gap: 20px;
     }
-    @media (max-width: 800px) {
+    @media (max-width: 900px) {
       .container {
         grid-template-columns: 1fr;
       }
@@ -49,8 +98,10 @@
       background: #fff;
       border-radius: 8px;
       padding: 16px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
+
+    /* LIST TIN */
     .sidebar h2 {
       font-size: 18px;
       margin-bottom: 10px;
@@ -66,20 +117,27 @@
     .news-item:last-child {
       border-bottom: none;
     }
-    .news-item-title {
+    .news-title {
       font-weight: bold;
       font-size: 15px;
-      color: #0d6efd;
+      color: #222;
       text-decoration: none;
     }
-    .news-item-title:hover {
-      text-decoration: underline;
+    .news-title:hover {
+      color: #c62828;
     }
     .news-meta {
       font-size: 12px;
       color: #777;
       margin-top: 4px;
     }
+    .news-summary {
+      font-size: 13px;
+      color: #555;
+      margin-top: 4px;
+    }
+
+    /* NỘI DUNG BÀI */
     .content h2 {
       font-size: 20px;
       margin-bottom: 6px;
@@ -110,12 +168,12 @@
     }
     .ad-box {
       background: #fff;
-      max-width: 400px;
+      max-width: 420px;
       width: 90%;
-      padding: 20px;
+      padding: 20px 18px;
       border-radius: 10px;
       text-align: center;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
     }
     .ad-title {
       font-size: 18px;
@@ -140,7 +198,7 @@
       padding: 8px 16px;
       border-radius: 6px;
       border: none;
-      background: #0d6efd;
+      background: #ff6f00;
       color: #fff;
       font-size: 14px;
       cursor: pointer;
@@ -154,14 +212,27 @@
 </head>
 <body>
 <header>
-  <h1>Bản Tin Hằng Ngày</h1>
-  <p>Tin ngắn – giao diện gọn – kèm affiliate Shopee</p>
+  <div class="header-inner">
+    <img src="logo-tingo.jpg" alt="TINGO Logo" class="logo">
+    <div class="header-text">
+      <h1>TINGO NEWS</h1>
+      <p>FAST · CONVENIENT · AUTHENTIC – Tin tức chọn lọc mỗi ngày</p>
+    </div>
+  </div>
 </header>
+
+<!-- THANH CHUYÊN MỤC -->
+<div class="category-bar">
+  <button class="cat-btn active" data-cat="all">Tất cả</button>
+  <button class="cat-btn" data-cat="Thời sự">Thời sự</button>
+  <button class="cat-btn" data-cat="Công nghệ">Công nghệ</button>
+  <button class="cat-btn" data-cat="Đời sống">Đời sống</button>
+</div>
 
 <div class="container">
   <!-- DANH SÁCH BÀI VIẾT -->
   <aside class="sidebar">
-    <h2>Tin mới nhất</h2>
+    <h2>Tin mới</h2>
     <ul class="news-list" id="newsList"></ul>
   </aside>
 
@@ -169,7 +240,7 @@
   <main class="content">
     <div id="articleContent">
       <p class="placeholder">
-        Hãy chọn một bài viết ở bên trái để xem nội dung.
+        Chọn một bài viết ở danh sách "Tin mới" bên trái để đọc nội dung.
       </p>
     </div>
   </main>
@@ -192,54 +263,59 @@
 </div>
 
 <script>
-  // ===== DỮ LIỆU GIẢ LẬP BÀI VIẾT + LINK SHOPEE =====
-  // Thay các link Shopee dưới đây bằng link affiliate thật của bạn
+  // ================= DỮ LIỆU TIN TỨC =================
+  // 👉 Thay các link shopeeLink bằng link affiliate Shopee của bạn
   const articles = [
     {
       id: '1',
-      title: 'Mẹo tiết kiệm chi tiêu gia đình trong thời bão giá',
+      title: 'Giá xăng giảm, giá hàng hóa có hạ nhiệt?',
       date: '15/11/2025',
-      category: 'Kinh tế',
-      summary: 'Một vài mẹo đơn giản giúp bạn tối ưu chi tiêu hằng ngày.',
+      category: 'Thời sự',
+      summary: 'Sau nhiều lần điều chỉnh giá xăng, người dân trông chờ giá hàng hoá giảm theo.',
       content: `
-        <p>Trong bối cảnh giá cả leo thang, việc quản lý chi tiêu thông minh là
-        điều rất quan trọng. Hãy bắt đầu bằng việc ghi chép lại toàn bộ khoản
-        thu – chi hằng tháng...</p>
-        <p>Bạn có thể tận dụng các app mua sắm, mã giảm giá và chương trình
-        hoàn xu để tối ưu số tiền bỏ ra mà vẫn đảm bảo chất lượng cuộc sống.</p>
+        <p>Sau kỳ điều chỉnh mới đây, giá xăng trong nước đã giảm nhẹ, tạo kỳ vọng
+        giá hàng hóa thiết yếu sẽ hạ nhiệt theo. Tuy nhiên, trên thực tế, nhiều
+        mặt hàng vẫn giữ nguyên mức giá cũ.</p>
+        <p>Chuyên gia cho rằng cần thêm thời gian để doanh nghiệp điều chỉnh chi
+        phí, và người tiêu dùng nên chủ động so sánh giá, tận dụng chương trình
+        khuyến mãi khi mua sắm.</p>
       `,
-      productName: 'Sổ tay ghi chép chi tiêu gia đình',
-      productDesc: 'Giúp bạn theo dõi chi tiêu mỗi ngày, nhỏ gọn, dễ mang theo.',
+      productName: 'Combo nhu yếu phẩm giảm giá trên Shopee',
+      productDesc: 'Gói combo dầu ăn, nước mắm, mì gói… tiết kiệm so với mua lẻ.',
       shopeeLink: 'https://shopee.vn/'
     },
     {
       id: '2',
-      title: '5 phụ kiện không thể thiếu khi làm việc tại nhà',
+      title: 'Smartphone tầm trung đang cạnh tranh khốc liệt',
       date: '15/11/2025',
       category: 'Công nghệ',
-      summary: 'Góc làm việc gọn gàng giúp bạn tập trung và làm việc hiệu quả hơn.',
+      summary: 'Nhiều mẫu máy mới ra mắt cấu hình mạnh, giá dễ tiếp cận.',
       content: `
-        <p>Làm việc tại nhà đã trở nên phổ biến, nhưng không phải ai cũng tối
-        ưu không gian làm việc của mình. Một chiếc giá đỡ laptop, ghế ngồi
-        êm ái hay đèn bàn đủ sáng sẽ giúp bạn cải thiện sức khỏe lẫn hiệu quả.</p>
+        <p>Phân khúc smartphone tầm trung đang chứng kiến cuộc đua cấu hình
+        và camera giữa các hãng lớn. Người dùng có nhiều lựa chọn với mức
+        giá dưới 7 triệu nhưng vẫn sở hữu màn hình đẹp, pin trâu.</p>
+        <p>Các chương trình giảm giá, trả góp 0% và quà tặng kèm theo cũng là
+        yếu tố thu hút người mua trong giai đoạn cuối năm.</p>
       `,
-      productName: 'Giá đỡ laptop gấp gọn',
-      productDesc: 'Nâng laptop ngang tầm mắt, hạn chế đau cổ và gù lưng.',
+      productName: 'Điện thoại tầm trung hot trên Shopee',
+      productDesc: 'Máy chính hãng, hỗ trợ trả góp, nhiều mã giảm giá.',
       shopeeLink: 'https://shopee.vn/'
     },
     {
       id: '3',
-      title: 'Bí quyết giữ sức khỏe khi làm việc văn phòng',
+      title: 'Xu hướng ăn uống lành mạnh của giới trẻ',
       date: '14/11/2025',
-      category: 'Sức khỏe',
-      summary: 'Ngồi nhiều không tốt – nhưng chỉ cần vài thói quen nhỏ để cải thiện.',
+      category: 'Đời sống',
+      summary: 'Giới trẻ chuyển sang tự nấu ăn, dùng thực phẩm organic nhiều hơn.',
       content: `
-        <p>Nhân viên văn phòng thường phải ngồi nhiều giờ liền trước màn hình
-        máy tính. Hãy đặt báo thức đứng dậy vận động nhẹ mỗi 60 phút, uống
-        đủ nước và điều chỉnh chiều cao ghế – bàn làm việc hợp lý.</p>
+        <p>Ngày càng nhiều bạn trẻ quan tâm đến chế độ ăn lành mạnh để giữ dáng
+        và cải thiện sức khỏe. Các món salad, sinh tố, ngũ cốc nguyên hạt được
+        ưa chuộng hơn đồ ăn nhanh.</p>
+        <p>Các cửa hàng thực phẩm sạch, đồ bếp tiện lợi và hộp đựng meal prep
+        bán rất chạy trên các sàn thương mại điện tử.</p>
       `,
-      productName: 'Bình nước nhắc giờ uống',
-      productDesc: 'In sẵn mốc thời gian, giúp bạn uống đủ nước mỗi ngày.',
+      productName: 'Bộ hộp thủy tinh meal-prep',
+      productDesc: 'Chia khẩu phần ăn cho cả tuần, an toàn trong lò vi sóng.',
       shopeeLink: 'https://shopee.vn/'
     }
   ];
@@ -253,25 +329,53 @@
   const countdownEl = document.getElementById('countdown');
   const adOpenNowBtn = document.getElementById('adOpenNow');
 
+  const categoryButtons = document.querySelectorAll('.cat-btn');
+
   let currentArticle = null;
   let countdownTimer = null;
+  let currentCategoryFilter = 'all';
 
-  // ===== TẠO DANH SÁCH BÀI VIẾT =====
+  // ====== RENDER DANH SÁCH TIN THEO CHUYÊN MỤC ======
   function renderNewsList() {
     newsListEl.innerHTML = '';
-    articles.forEach(article => {
+    const filtered = articles.filter(a => {
+      if (currentCategoryFilter === 'all') return true;
+      return a.category === currentCategoryFilter;
+    });
+
+    filtered.forEach(article => {
       const li = document.createElement('li');
       li.className = 'news-item';
       li.innerHTML = `
-        <a class="news-item-title" href="javascript:void(0)">${article.title}</a>
+        <a class="news-title" href="javascript:void(0)">${article.title}</a>
         <div class="news-meta">${article.date} · ${article.category}</div>
+        <div class="news-summary">${article.summary}</div>
       `;
       li.addEventListener('click', () => openArticle(article.id));
       newsListEl.appendChild(li);
     });
+
+    if (filtered.length === 0) {
+      newsListEl.innerHTML = '<li class="news-item">Chưa có bài viết cho chuyên mục này.</li>';
+    }
   }
 
-  // ===== HIỂN THỊ BÀI VIẾT =====
+  // ====== CHỌN CHUYÊN MỤC ======
+  categoryButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      categoryButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCategoryFilter = btn.getAttribute('data-cat');
+      renderNewsList();
+      articleContentEl.innerHTML = `
+        <p class="placeholder">
+          Chọn một bài viết trong chuyên mục <strong>${currentCategoryFilter === 'all' ? 'Tất cả' : currentCategoryFilter}</strong> để đọc.
+        </p>
+      `;
+    });
+  });
+
+  // ====== HIỂN THỊ NỘI DUNG BÀI VIẾT ======
   function openArticle(id) {
     const article = articles.find(a => a.id === id);
     if (!article) return;
@@ -283,7 +387,6 @@
       ${article.content}
     `;
 
-    // Kiểm tra đã hiện quảng cáo cho bài này chưa
     const adKey = 'ad_shown_' + id;
     const adShown = localStorage.getItem(adKey);
 
@@ -292,7 +395,7 @@
     }
   }
 
-  // ===== HIỆN QUẢNG CÁO + TỰ ĐỘNG MỞ LINK SHOPEE =====
+  // ====== SHOW QUẢNG CÁO + ĐẾM NGƯỢC ======
   function showAd(article, adKey) {
     adProductName.textContent = article.productName;
     adProductDesc.textContent = article.productDesc;
@@ -301,7 +404,6 @@
     let timeLeft = 3;
     countdownEl.textContent = timeLeft;
 
-    // Đếm ngược
     countdownTimer = setInterval(() => {
       timeLeft--;
       countdownEl.textContent = timeLeft;
@@ -311,7 +413,6 @@
       }
     }, 1000);
 
-    // Nút "Mở ngay" nếu người dùng muốn click luôn
     adOpenNowBtn.onclick = () => {
       clearInterval(countdownTimer);
       openShopee(article, adKey);
@@ -319,14 +420,8 @@
   }
 
   function openShopee(article, adKey) {
-    // Đánh dấu là quảng cáo đã hiện cho bài này
     localStorage.setItem(adKey, '1');
-
-    // Ẩn overlay
     adOverlay.style.display = 'none';
-
-    // Mở link Shopee (affiliate) trong tab mới
-    // LƯU Ý: Một số trình duyệt có thể chặn popup nếu quá nghiêm ngặt.
     window.open(article.shopeeLink, '_blank');
   }
 
