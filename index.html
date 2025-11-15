@@ -306,7 +306,7 @@
       font-weight: 600;
     }
 
-    /* ===== OVERLAY QUẢNG CÁO TOÀN TRANG ===== */
+    /* ===== OVERLAY ĐẾM NGƯỢC (KHÔNG GIẢI THÍCH) ===== */
     .ad-overlay {
       position: fixed;
       inset: 0;
@@ -327,9 +327,9 @@
 
     .ad-box {
       background: #020617;
-      max-width: 380px;
-      width: 90%;
-      padding: 20px 18px 18px;
+      max-width: 320px;
+      width: 80%;
+      padding: 18px 16px 16px;
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 24px 60px rgba(15,23,42,.9);
@@ -345,52 +345,26 @@
     .ad-logo {
       max-width: 180px;
       max-height: 50px;
-      margin-bottom: 8px;
-    }
-
-    .ad-title {
-      font-size: 16px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-      color: #e5e7eb;
-    }
-
-    .ad-subtitle {
-      font-size: 12px;
-      color: #9ca3af;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .ad-count-number {
       font-size: 36px;
       font-weight: 700;
       color: var(--accent);
-      margin-bottom: 2px;
+      margin-bottom: 4px;
     }
 
     .ad-count-label {
       font-size: 13px;
       color: #e5e7eb;
-      margin-bottom: 8px;
-    }
-
-    .ad-status {
-      font-size: 12px;
-      color: #9ca3af;
-      margin-bottom: 12px;
-      min-height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+      margin-bottom: 10px;
     }
 
     .ad-button-row {
       display: flex;
       justify-content: center;
       gap: 8px;
-      margin-bottom: 6px;
     }
 
     .ad-button {
@@ -415,11 +389,6 @@
       box-shadow: 0 16px 32px rgba(248,113,113,.6);
     }
 
-    .ad-note {
-      font-size: 11px;
-      color: #6b7280;
-    }
-
     /* ===== ANIMATION ===== */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(6px); }
@@ -432,7 +401,7 @@
   <!-- ===== HEADER ===== -->
   <header>
     <div class="header-inner">
-      <!-- Logo lớn, không boxed -->
+      <!-- Logo lớn, không box -->
       <img src="tingo-logo.png" alt="TINGO Logo" class="logo">
       <div class="header-text">
         <h1>TINGO NEWS</h1>
@@ -482,28 +451,16 @@
     </section>
   </main>
 
-  <!-- ===== OVERLAY QUẢNG CÁO TOÀN TRANG ===== -->
+  <!-- ===== OVERLAY ĐẾM NGƯỢC ===== -->
   <div id="adOverlay" class="ad-overlay">
     <div class="ad-box">
       <img src="tingo-logo.png" alt="TINGO Logo" class="ad-logo">
-      <div class="ad-title">TINGO AUTO</div>
-      <div class="ad-subtitle">ĐANG CHUẨN BỊ MỞ ƯU ĐÃI</div>
-
       <div id="adCountNumber" class="ad-count-number">-</div>
-      <div class="ad-count-label">giây nữa sẽ mở trang ưu đãi</div>
-
-      <div id="adStatus" class="ad-status">
-        Đang kiểm tra lần chuyển gần nhất...
-      </div>
-
+      <div class="ad-count-label">giây nữa tiếp tục</div>
       <div class="ad-button-row">
         <button id="adOpenNow" class="ad-button ad-primary">
-          Mở ngay
+          Tiếp tục
         </button>
-      </div>
-
-      <div class="ad-note">
-        Sau khi mở, bạn có thể đọc tin bình thường. Lần tự mở tiếp theo chỉ diễn ra sau <strong>2 phút</strong>.
       </div>
     </div>
   </div>
@@ -511,7 +468,7 @@
   <!-- ===== SCRIPT ===== -->
   <script>
     /* ===== CẤU HÌNH LINK ĐÍCH =====
-       TODO: sửa link này thành link Shopee affiliate của bạn */
+       👉 Sửa link này thành link Shopee affiliate của bạn */
     const SHOPEE_URL = "https://shopee.vn/";
     const COUNTDOWN_SECONDS = 3;                // đếm ngược 3 giây
     const INTERVAL_MS = 2 * 60 * 1000;          // lặp mỗi 2 phút
@@ -519,7 +476,6 @@
 
     const adOverlay = document.getElementById("adOverlay");
     const adCountNumber = document.getElementById("adCountNumber");
-    const adStatus = document.getElementById("adStatus");
     const adOpenNowBtn = document.getElementById("adOpenNow");
 
     let countdownTimer = null;
@@ -544,7 +500,6 @@
       let remain = COUNTDOWN_SECONDS;
 
       adCountNumber.textContent = remain.toString();
-      adStatus.textContent = "";
 
       countdownTimer = setInterval(() => {
         remain--;
@@ -553,7 +508,7 @@
           clearInterval(countdownTimer);
           hideOverlay();
           openShopee();
-          scheduleNextLoop();  // set lần chạy tiếp theo
+          scheduleNextLoop();  // đặt lần chạy tiếp theo
         }
       }, 1000);
     }
@@ -572,13 +527,8 @@
         return;
       }
 
-      // Còn thời gian phải chờ trước khi được tự mở lại
-      const remainSec = Math.ceil(remainMs / 1000);
-      adCountNumber.textContent = "-";
-      adStatus.textContent =
-        "Hệ thống sẽ tự mở lại sau " + remainSec + " giây.";
-
-      hideOverlay(); // cho user đọc tin, chỉ hiện lại khi sắp mở
+      // Còn thời gian phải chờ -> không hiển thị overlay, chỉ đặt lịch sẵn
+      hideOverlay();
       waitTimer = setTimeout(startCountdown, remainMs);
     }
 
@@ -711,7 +661,7 @@
 
     // Khởi tạo
     renderNewsList();
-    scheduleNextLoop();   // bắt đầu logic tự mở Shopee
+    scheduleNextLoop();   // bắt đầu logic đếm ngược + mở link
   </script>
 </body>
 </html>
