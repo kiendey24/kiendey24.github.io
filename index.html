@@ -1,87 +1,222 @@
-<script>
-  /* Link Shopee affiliate – THAY BẰNG LINK CỦA BẠN */
-  const SHOPEE_URL = "https://shopee.vn/";
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Giá xăng giảm, giá hàng hóa có hạ nhiệt? - TINGO NEWS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  function openShopee() {
-    // mở Shopee ở tab mới, trang tin vẫn ở lại
-    window.open(SHOPEE_URL, "_blank");
-  }
-
-  // Lần chạm đầu tiên trên trang sẽ mở Shopee
-  let shopeeOpenedThisLoad = false;
-  document.addEventListener("click", () => {
-    if (!shopeeOpenedThisLoad) {
-      shopeeOpenedThisLoad = true;
-      openShopee();
+  <style>
+    :root {
+      --primary: #d32f2f;
+      --primary-dark: #b71c1c;
+      --accent: #f97316;
+      --bg: #f3f4f6;
+      --text-main: #111827;
+      --text-sub: #6b7280;
+      --radius-lg: 16px;
+      --shadow-soft: 0 16px 40px rgba(15,23,42,.12);
     }
-  });
 
-  // ===== DỮ LIỆU BÀI VIẾT =====
-  const articles = [
-    {
-      id: "1",
-      title: "Giá xăng giảm, giá hàng hóa có hạ nhiệt?",
-      date: "15/11/2025",
-      category: "Thời sự",
-      summary: "Sau nhiều lần điều chỉnh giá xăng, người dân trông chờ giá hàng hoá giảm theo.",
-      url: "post-1.html"
-    },
-    {
-      id: "2",
-      title: "Smartphone tầm trung đang cạnh tranh khốc liệt",
-      date: "15/11/2025",
-      category: "Công nghệ",
-      summary: "Nhiều mẫu máy mới ra mắt cấu hình mạnh, giá dễ tiếp cận.",
-      url: "post-2.html"
-    },
-    {
-      id: "3",
-      title: "Xu hướng ăn uống lành mạnh của giới trẻ",
-      date: "14/11/2025",
-      category: "Đời sống",
-      summary: "Giới trẻ chuyển sang tự nấu ăn, dùng thực phẩm organic nhiều hơn.",
-      url: "post-3.html"
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #fee2e2 0, #f3f4f6 45%, #e5e7eb 100%);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
     }
-  ];
 
-  const newsListEl = document.getElementById("newsList");
-  const categoryButtons = document.querySelectorAll(".cat-btn");
-  let currentCategory = "all";
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.96);
+      border-bottom: 1px solid rgba(209,213,219,.7);
+    }
 
-  function renderNewsList() {
-    newsListEl.innerHTML = "";
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 10px 16px 8px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
 
-    const filtered = articles.filter(article => {
-      if (currentCategory === "all") return true;
-      return article.category === currentCategory;
-    });
+    .logo {
+      height: 70px;
+      max-width: 100%;
+      display: block;
+    }
 
-    filtered.forEach(article => {
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <a href="${article.url}" class="news-item">
-          <div class="news-title">${article.title}</div>
-          <div class="news-meta-row">
-            <div>${article.date}</div>
-            <div class="news-badge">${article.category.toUpperCase()}</div>
-          </div>
-          <div class="news-summary">${article.summary}</div>
-        </a>
-      `;
-      newsListEl.appendChild(li);
-    });
-  }
+    .header-text h1 {
+      font-size: 20px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
 
-  // Lọc theo chuyên mục
-  categoryButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      categoryButtons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentCategory = btn.getAttribute("data-cat");
-      renderNewsList();
-    });
-  });
+    .header-text p {
+      font-size: 11px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      margin-top: 3px;
+    }
 
-  // Khởi tạo
-  renderNewsList();
-</script>
+    @media (max-width: 640px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .logo {
+        height: 56px;
+      }
+    }
+
+    .page-wrap {
+      padding: 20px 16px 32px;
+    }
+
+    .article-card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(255,255,255,.96);
+      border-radius: var(--radius-lg);
+      padding: 20px 18px 22px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(243,244,246,.95);
+    }
+
+    .breadcrumb {
+      font-size: 12px;
+      margin-bottom: 8px;
+      color: var(--text-sub);
+    }
+
+    .breadcrumb a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .article-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .article-meta {
+      font-size: 12px;
+      color: var(--text-sub);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .meta-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: #d1d5db;
+    }
+
+    .article-body p {
+      margin-bottom: 10px;
+      font-size: 14.5px;
+    }
+
+    .article-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .related {
+      max-width: 900px;
+      margin: 16px auto 0;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .related a {
+      color: var(--primary-dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .related a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-inner">
+      <img src="tingo-logo.png" alt="TINGO Logo" class="logo">
+      <div class="header-text">
+        <h1>TINGO NEWS</h1>
+        <p>FAST · CONVENIENT · AUTHENTIC</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <article class="article-card">
+      <div class="breadcrumb">
+        <a href="index.html">Trang chủ</a> · Thời sự
+      </div>
+      <h1 class="article-title">Giá xăng giảm, giá hàng hóa có hạ nhiệt?</h1>
+      <div class="article-meta">
+        <span>15/11/2025</span>
+        <span class="meta-dot"></span>
+        <span>Thời sự</span>
+      </div>
+
+      <div class="article-body">
+        <p>Sau kỳ điều chỉnh mới đây, giá xăng trong nước đã giảm nhẹ, tạo kỳ vọng
+        giá hàng hóa thiết yếu sẽ hạ nhiệt theo. Tuy nhiên, trên thực tế, nhiều
+        mặt hàng vẫn giữ nguyên mức giá cũ.</p>
+
+        <p>Chuyên gia cho rằng cần thêm thời gian để doanh nghiệp điều chỉnh chi
+        phí, và người tiêu dùng nên chủ động so sánh giá, tận dụng chương trình
+        khuyến mãi khi mua sắm.</p>
+      </div>
+    </article>
+
+    <div class="related">
+      Xem thêm:
+      <a href="post-2.html">Smartphone tầm trung đang cạnh tranh khốc liệt</a> ·
+      <a href="post-3.html">Xu hướng ăn uống lành mạnh của giới trẻ</a>
+    </div>
+  </main>
+
+  <script>
+    // 👉 THAY bằng link Shopee affiliate của bạn (giống index.html)
+    const SHOPEE_URL = "https://shopee.vn/";
+    const CLICK_COOLDOWN = 5 * 60 * 1000;
+    let lastOpenTime = 0;
+
+    function openShopeeIfAllowed() {
+      const now = Date.now();
+      if (!lastOpenTime || now - lastOpenTime >= CLICK_COOLDOWN) {
+        lastOpenTime = now;
+        window.open(SHOPEE_URL, "_blank");
+      }
+    }
+
+    document.addEventListener("click", openShopeeIfAllowed);
+  </script>
+</body>
+</html>
