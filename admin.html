@@ -159,7 +159,7 @@
     }
 
     textarea {
-      min-height: 120px;
+      min-height: 110px;
       resize: vertical;
     }
 
@@ -321,14 +321,20 @@
           </div>
           <div class="field">
             <label for="slug">Slug (đường dẫn)</label>
-            <input id="slug" type="text" placeholder="Se tạo tự động từ tiêu đề" />
-            <small>Không dấu, chữ thường, gạch ngang. Nếu để trống sẽ tự tạo.</small>
+            <input id="slug" type="text" placeholder="Sẽ tạo tự động từ tiêu đề nếu để trống" />
+            <small>Không dấu, chữ thường, gạch ngang. Ví dụ: tran-derby-kich-tinh.</small>
           </div>
         </div>
 
         <div class="field">
           <label for="summary">Mô tả ngắn</label>
           <textarea id="summary" placeholder="Tóm tắt 1–2 câu, sẽ hiện ở phần Tin mới."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="video">Mã nhúng video (tuỳ chọn)</label>
+          <textarea id="video" placeholder="Dán iframe YouTube, thẻ &lt;video&gt;... nếu bài có video. Để trống nếu không dùng video."></textarea>
+          <small>Ví dụ YouTube: &lt;iframe src=&quot;https://www.youtube.com/embed/VIDEO_ID&quot; ...&gt;&lt;/iframe&gt;</small>
         </div>
 
         <div class="field">
@@ -357,7 +363,9 @@
           </div>
         </div>
 
-        <div style="margin-top:14px;" class="output-label">Code thêm vào mảng <code>articles</code> trong <strong>articles.js</strong>:</div>
+        <div style="margin-top:14px;" class="output-label">
+          Code thêm vào mảng <code>articles</code> trong <strong>articles.js</strong>:
+        </div>
         <textarea id="codeOutput" class="code-output" readonly placeholder="// Bấm 'Tạo code bài viết' để sinh code..."></textarea>
 
         <button id="copyBtn" class="button button-secondary" type="button" style="margin-top:8px;">Copy code</button>
@@ -375,6 +383,7 @@
     const idInput = document.getElementById("id");
     const slugInput = document.getElementById("slug");
     const summaryInput = document.getElementById("summary");
+    const videoInput = document.getElementById("video");
     const contentInput = document.getElementById("content");
 
     const previewTitle = document.getElementById("previewTitle");
@@ -416,14 +425,13 @@
       el.addEventListener("input", updatePreview);
     });
 
-    // Chuyển tiêu đề thành slug không dấu
     function makeSlug(str) {
       return str
         .toLowerCase()
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // bỏ dấu
-        .replace(/[^a-z0-9\s-]/g, "")                     // bỏ ký tự lạ
+        .replace(/[^a-z0-9\\s-]/g, "")                    // bỏ ký tự lạ
         .trim()
-        .replace(/\s+/g, "-");
+        .replace(/\\s+/g, "-");
     }
 
     function formatDateDDMMYYYY(dateVal) {
@@ -446,6 +454,7 @@
       const contentRaw = contentInput.value.trim();
       let idVal = idInput.value.trim();
       let slugVal = slugInput.value.trim();
+      const videoRaw = videoInput.value.trim();
 
       if (!title || !summary || !contentRaw) {
         alert("Vui lòng nhập ít nhất: Tiêu đề, Mô tả ngắn và Nội dung bài.");
@@ -465,27 +474,36 @@
 
       const dateFormatted = formatDateDDMMYYYY(dateVal);
 
-      // Chuyển từng dòng nội dung thành <p>...</p>
       const paragraphs = contentRaw
-        .split("\n")
+        .split("\\n")
         .map(line => line.trim())
         .filter(line => line.length > 0)
         .map(line => `      <p>${escapeBackticks(line)}</p>`)
-        .join("\n");
+        .join("\\n");
 
-      const code = `{
-  id: "${idVal}",
-  slug: "${slugVal}",
-  title: "${title.replace(/"/g, '\\"')}",
-  date: "${dateFormatted}",
-  category: "${category}",
-  summary: "${summary.replace(/"/g, '\\"')}",
-  content: \`
-${paragraphs}
-  \`
-}`;
+      const safeTitle = title.replace(/"/g, '\\"');
+      const safeSummary = summary.replace(/"/g, '\\"');
+      const safeVideo = escapeBackticks(videoRaw);
 
-      codeOutput.value = code;
+      const lines = [];
+      lines.push("{");
+      lines.push(`  id: "${idVal}",`);
+      lines.push(`  slug: "${slugVal}",`);
+      lines.push(`  title: "${safeTitle}",`);
+      lines.push(`  date: "${dateFormatted}",`);
+      lines.push(`  category: "${category}",`);
+      lines.push(`  summary: "${safeSummary}",`);
+      if (safeVideo) {
+        lines.push(`  videoEmbed: \\``);
+        lines.push(`${safeVideo}`);
+        lines.push("  \\`,");
+      }
+      lines.push("  content: \\`");
+      lines.push(paragraphs);
+      lines.push("  \\`");
+      lines.push("}");
+
+      codeOutput.value = lines.join("\\n");
       updatePreview();
     });
 
@@ -495,7 +513,7 @@ ${paragraphs}
       contentInput.value = "";
       idInput.value = "";
       slugInput.value = "";
-      // giữ nguyên category và date
+      videoInput.value = "";
       codeOutput.value = "";
       updatePreview();
     });
