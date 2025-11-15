@@ -2,8 +2,10 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Giá xăng giảm, giá hàng hóa có hạ nhiệt? - TINGO NEWS</title>
+  <title>TINGO NEWS - Fast · Convenient · Authentic</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -17,10 +19,16 @@
       --text-main: #111827;
       --text-sub: #6b7280;
       --radius-lg: 16px;
+      --radius-md: 10px;
       --shadow-soft: 0 16px 40px rgba(15,23,42,.12);
+      --transition-fast: 180ms ease-out;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -30,6 +38,7 @@
       min-height: 100vh;
     }
 
+    /* ===== HEADER ===== */
     header {
       position: sticky;
       top: 0;
@@ -40,7 +49,7 @@
     }
 
     .header-inner {
-      max-width: 900px;
+      max-width: 1120px;
       margin: 0 auto;
       padding: 10px 16px 8px;
       display: flex;
@@ -50,19 +59,19 @@
     }
 
     .logo {
-      height: 70px;
+      height: 80px;
       max-width: 100%;
       display: block;
     }
 
     .header-text h1 {
-      font-size: 20px;
+      font-size: 22px;
       letter-spacing: .12em;
       text-transform: uppercase;
     }
 
     .header-text p {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text-sub);
       text-transform: uppercase;
       letter-spacing: .16em;
@@ -77,147 +86,74 @@
       }
 
       .logo {
-        height: 56px;
+        height: 60px;
+        margin-bottom: 4px;
+      }
+
+      .header-text h1 {
+        font-size: 18px;
       }
     }
 
+    /* ===== LAYOUT CHÍNH ===== */
     .page-wrap {
       padding: 20px 16px 32px;
     }
 
-    .article-card {
-      max-width: 900px;
+    .container {
+      max-width: 1120px;
       margin: 0 auto;
-      background: rgba(255,255,255,.96);
-      border-radius: var(--radius-lg);
-      padding: 20px 18px 22px;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(243,244,246,.95);
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 20px;
+      align-items: flex-start;
     }
 
-    .breadcrumb {
-      font-size: 12px;
-      margin-bottom: 8px;
-      color: var(--text-sub);
-    }
-
-    .breadcrumb a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .breadcrumb a:hover {
-      text-decoration: underline;
-    }
-
-    .article-title {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .article-meta {
-      font-size: 12px;
-      color: var(--text-sub);
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-
-    .meta-dot {
-      width: 4px;
-      height: 4px;
-      border-radius: 999px;
-      background: #d1d5db;
-    }
-
-    .article-body p {
-      margin-bottom: 10px;
-      font-size: 14.5px;
-    }
-
-    .article-body p:last-child {
-      margin-bottom: 0;
-    }
-
-    .related {
-      max-width: 900px;
-      margin: 16px auto 0;
-      font-size: 13px;
-      color: var(--text-sub);
-    }
-
-    .related a {
-      color: var(--primary-dark);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .related a:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-
-<body>
-  <header>
-    <div class="header-inner">
-      <img src="tingo-logo.png" alt="TINGO Logo" class="logo">
-      <div class="header-text">
-        <h1>TINGO NEWS</h1>
-        <p>FAST · CONVENIENT · AUTHENTIC</p>
-      </div>
-    </div>
-  </header>
-
-  <main class="page-wrap">
-    <article class="article-card">
-      <div class="breadcrumb">
-        <a href="index.html">Trang chủ</a> · Thời sự
-      </div>
-      <h1 class="article-title">Giá xăng giảm, giá hàng hóa có hạ nhiệt?</h1>
-      <div class="article-meta">
-        <span>15/11/2025</span>
-        <span class="meta-dot"></span>
-        <span>Thời sự</span>
-      </div>
-
-      <div class="article-body">
-        <p>Sau kỳ điều chỉnh mới đây, giá xăng trong nước đã giảm nhẹ, tạo kỳ vọng
-        giá hàng hóa thiết yếu sẽ hạ nhiệt theo. Tuy nhiên, trên thực tế, nhiều
-        mặt hàng vẫn giữ nguyên mức giá cũ.</p>
-
-        <p>Chuyên gia cho rằng cần thêm thời gian để doanh nghiệp điều chỉnh chi
-        phí, và người tiêu dùng nên chủ động so sánh giá, tận dụng chương trình
-        khuyến mãi khi mua sắm.</p>
-      </div>
-    </article>
-
-    <div class="related">
-      Xem thêm:
-      <a href="post-2.html">Smartphone tầm trung đang cạnh tranh khốc liệt</a> ·
-      <a href="post-3.html">Xu hướng ăn uống lành mạnh của giới trẻ</a>
-    </div>
-  </main>
-
-  <script>
-    // 👉 THAY bằng link Shopee affiliate của bạn (trùng với index.html)
-    const SHOPEE_URL = "https://shopee.vn/";
-    const CLICK_COOLDOWN = 5 * 60 * 1000;
-    let lastOpenTime = 0;
-
-    function openShopeeIfAllowed() {
-      const now = Date.now();
-      if (!lastOpenTime || now - lastOpenTime >= CLICK_COOLDOWN) {
-        lastOpenTime = now;
-        window.open(SHOPEE_URL, "_blank");
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: minmax(0, 1fr);
       }
     }
 
-    // click bất kỳ đâu trên trang bài viết cũng kích hoạt Shopee (nếu đủ 5 phút)
-    document.addEventListener("click", openShopeeIfAllowed);
-  </script>
-</body>
-</html>
+    .card {
+      background: rgba(255,255,255,.96);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 20px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(243,244,246,.95);
+      animation: fadeInUp 320ms ease-out;
+    }
+
+    /* ===== SIDEBAR BÊN TRÁI (CHUYÊN MỤC) ===== */
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .sidebar-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .sidebar-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--text-sub);
+    }
+
+    .side-nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .side-nav-item {
+      width: 100%;
+      text-align: left;
+      border: 0;
+      background: #ffffff;
+      color: var(--text-sub);
+      padding: 8px
