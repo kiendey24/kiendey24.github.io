@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>TIN CHI TIẾT - TINGO NEWS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #d32f2f;
+      --primary-dark: #b71c1c;
+      --accent: #f97316;
+      --bg: #f3f4f6;
+      --text-main: #111827;
+      --text-sub: #6b7280;
+      --radius-lg: 16px;
+      --shadow-soft: 0 16px 40px rgba(15,23,42,.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #fee2e2 0, #f3f4f6 45%, #e5e7eb 100%);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.96);
+      border-bottom: 1px solid rgba(209,213,219,.7);
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 10px 16px 8px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      height: 70px;
+      max-width: 100%;
+      display: block;
+    }
+
+    .header-text h1 {
+      font-size: 20px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .header-text p {
+      font-size: 11px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      margin-top: 3px;
+    }
+
+    @media (max-width: 640px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .logo {
+        height: 56px;
+      }
+    }
+
+    .page-wrap {
+      padding: 20px 16px 32px;
+    }
+
+    .article-card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(255,255,255,.96);
+      border-radius: var(--radius-lg);
+      padding: 20px 18px 22px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(243,244,246,.95);
+    }
+
+    .breadcrumb {
+      font-size: 12px;
+      margin-bottom: 8px;
+      color: var(--text-sub);
+    }
+
+    .breadcrumb a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .article-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .article-meta {
+      font-size: 12px;
+      color: var(--text-sub);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .meta-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: #d1d5db;
+    }
+
+    .article-body p {
+      margin-bottom: 10px;
+      font-size: 14.5px;
+    }
+
+    .article-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ==== VIDEO EMBED ==== */
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 */
+      height: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      margin-bottom: 14px;
+      background: #000;
+    }
+
+    .video-wrapper iframe,
+    .video-wrapper video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      border-radius: 16px;
+    }
+
+    .related {
+      max-width: 900px;
+      margin: 16px auto 0;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .related a {
+      color: var(--primary-dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .related a:hover {
+      text-decoration: underline;
+    }
+
+    .not-found {
+      font-size: 15px;
+      color: var(--text-sub);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-inner">
+      <img src="tingo-logo.png" alt="TINGO Logo" class="logo">
+      <div class="header-text">
+        <h1>TINGO NEWS</h1>
+        <p>FAST · CONVENIENT · AUTHENTIC</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <article class="article-card" id="articleContainer">
+      <!-- Nội dung bài sẽ được JS render -->
+    </article>
+
+    <div class="related" id="relatedContainer" style="display:none;"></div>
+  </main>
+
+  <!-- DỮ LIỆU BÀI VIẾT -->
+  <script src="articles.js"></script>
+
+  <script>
+    // 👉 THAY bằng link Shopee affiliate của bạn (trùng với index.html)
+    const SHOPEE_URL = "https://shopee.vn/";
+    const CLICK_COOLDOWN = 5 * 60 * 1000;
+    let lastOpenTime = 0;
+
+    function openShopeeIfAllowed() {
+      const now = Date.now();
+      if (!lastOpenTime || now - lastOpenTime >= CLICK_COOLDOWN) {
+        lastOpenTime = now;
+        window.open(SHOPEE_URL, "_blank");
+      }
+    }
+
+    // BẤT KỲ click nào trên trang cũng kích Shopee nếu đủ 5 phút
+    document.addEventListener("click", openShopeeIfAllowed);
+
+    // Lấy ?id=... từ URL
+    function getQueryParam(name) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    }
+
+    const articleContainer = document.getElementById("articleContainer");
+    const relatedContainer = document.getElementById("relatedContainer");
+
+    function renderArticle() {
+      const id = getQueryParam("id");
+      const article = articles.find(a => a.id === id);
+
+      if (!article) {
+        articleContainer.innerHTML = `
+          <div class="not-found">
+            Không tìm thấy bài viết. <a href="index.html">Quay lại trang chủ</a>.
+          </div>
+        `;
+        return;
+      }
+
+      document.title = article.title + " - TINGO NEWS";
+
+      const hasVideo = article.videoEmbed && article.videoEmbed.trim();
+      const videoHtml = hasVideo
+        ? `<div class="video-wrapper">${article.videoEmbed}</div>`
+        : "";
+
+      articleContainer.innerHTML = `
+        <div class="breadcrumb">
+          <a href="index.html">Trang chủ</a> · ${article.category}
+        </div>
+        <h1 class="article-title">${article.title}</h1>
+        <div class="article-meta">
+          <span>${article.date}</span>
+          <span class="meta-dot"></span>
+          <span>${article.category}</span>
+        </div>
+        <div class="article-body">
+          ${videoHtml}
+          ${article.content}
+        </div>
+      `;
+
+      // Gợi ý 2 bài khác
+      const others = articles.filter(a => a.id !== article.id).slice(0, 2);
+      if (others.length > 0) {
+        relatedContainer.style.display = "block";
+        relatedContainer.innerHTML = `
+          Xem thêm:
+          ${others.map(o => `
+            <a href="article.html?id=${encodeURIComponent(o.id)}">${o.title}</a>
+          `).join(" · ")}
+        `;
+      }
+    }
+
+    renderArticle();
+  </script>
+</body>
+</html>
