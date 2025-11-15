@@ -306,7 +306,7 @@
       font-weight: 600;
     }
 
-    /* ===== OVERLAY ĐẾM NGƯỢC (KHÔNG GIẢI THÍCH) ===== */
+    /* ===== OVERLAY ĐẾM NGƯỢC ===== */
     .ad-overlay {
       position: fixed;
       inset: 0;
@@ -481,9 +481,12 @@
     let countdownTimer = null;
     let waitTimer = null;
 
+    // ==> ĐÃ SỬA: dùng window.location.href để mobile tự chuyển sang app Shopee
     function openShopee() {
+      // lưu thời gian lần chuyển gần nhất
       localStorage.setItem(STORAGE_KEY, Date.now().toString());
-      window.open(SHOPEE_URL, "_blank");
+      // chuyển thẳng trang hiện tại sang link Shopee
+      window.location.href = SHOPEE_URL;
     }
 
     function showOverlay() {
