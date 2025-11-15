@@ -142,7 +142,7 @@
       margin-bottom: 0;
     }
 
-    /* ==== IMAGE EMBED ==== */
+    /* IMAGE EMBED */
     .image-wrapper {
       border-radius: 16px;
       overflow: hidden;
@@ -155,7 +155,7 @@
       height: auto;
     }
 
-    /* ==== VIDEO EMBED ==== */
+    /* VIDEO EMBED */
     .video-wrapper {
       position: relative;
       padding-bottom: 56.25%; /* 16:9 */
@@ -176,7 +176,7 @@
       border-radius: 16px;
     }
 
-    /* ==== GALLERY (1 ô lớn + hàng nhỏ bên dưới) ==== */
+    /* GALLERY */
     .media-gallery {
       margin-bottom: 16px;
     }
@@ -197,11 +197,27 @@
       display: flex;
       gap: 8px;
       margin-top: 8px;
-      width: 100%; /* cùng chiều rộng với media-main */
+      width: 100%;
+      overflow-x: auto;       /* thanh trượt ngang */
+      padding-bottom: 4px;
+      scrollbar-width: thin;
+    }
+
+    .media-thumbs::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .media-thumbs::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .media-thumbs::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 999px;
     }
 
     .media-thumb {
-      flex: 1;
+      flex: 0 0 120px;        /* mỗi ô nhỏ ~120px, tràn thì kéo ngang */
       border-radius: 12px;
       border: 0;
       padding: 0;
@@ -287,14 +303,10 @@
   </header>
 
   <main class="page-wrap">
-    <article class="article-card" id="articleContainer">
-      <!-- Nội dung bài sẽ được JS render -->
-    </article>
-
+    <article class="article-card" id="articleContainer"></article>
     <div class="related" id="relatedContainer" style="display:none;"></div>
   </main>
 
-  <!-- DỮ LIỆU BÀI VIẾT -->
   <script src="articles.js"></script>
 
   <script>
@@ -311,7 +323,6 @@
       }
     }
 
-    // BẤT KỲ click nào trên trang cũng kích Shopee nếu đủ 5 phút
     document.addEventListener("click", openShopeeIfAllowed);
 
     function getQueryParam(name) {
@@ -342,9 +353,8 @@
 
       document.title = article.title + " - TINGO NEWS";
 
-      // Gom danh sách media: ưu tiên mediaEmbeds[], fallback imageEmbed / videoEmbed cũ
+      // Gom media: ưu tiên mediaEmbeds[], fallback imageEmbed/videoEmbed cho bài cũ
       let mediaList = [];
-
       if (Array.isArray(article.mediaEmbeds) && article.mediaEmbeds.length > 0) {
         mediaList = article.mediaEmbeds.map(html => {
           const lower = String(html).toLowerCase();
@@ -355,19 +365,11 @@
       } else {
         if (article.imageEmbed && article.imageEmbed.trim()) {
           const html = article.imageEmbed;
-          mediaList.push({
-            kind: "image",
-            html,
-            thumbSrc: extractImgSrc(html)
-          });
+          mediaList.push({ kind: "image", html, thumbSrc: extractImgSrc(html) });
         }
         if (article.videoEmbed && article.videoEmbed.trim()) {
           const html = article.videoEmbed;
-          mediaList.push({
-            kind: "video",
-            html,
-            thumbSrc: null
-          });
+          mediaList.push({ kind: "video", html, thumbSrc: null });
         }
       }
 
@@ -424,7 +426,6 @@
         </div>
       `;
 
-      // Bắt sự kiện click thumbnail để đổi media
       const thumbs = articleContainer.querySelectorAll(".media-thumb");
       const mainItems = articleContainer.querySelectorAll(".media-main-item");
 
@@ -432,7 +433,6 @@
         thumbs.forEach(btn => {
           btn.addEventListener("click", () => {
             const idx = btn.getAttribute("data-index");
-
             mainItems.forEach(el => el.classList.remove("active"));
             thumbs.forEach(el => el.classList.remove("active"));
 
@@ -445,7 +445,6 @@
         });
       }
 
-      // Gợi ý 2 bài khác (nếu có)
       const others = articles.filter(a => a.id !== article.id).slice(0, 2);
       if (others.length > 0) {
         relatedContainer.style.display = "block";
