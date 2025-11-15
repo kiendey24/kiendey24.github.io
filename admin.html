@@ -316,13 +316,13 @@
         <div class="row">
           <div class="field">
             <label for="id">ID bài viết</label>
-            <input id="id" type="text" placeholder="VD: 4" />
-            <small>Có thể dùng số tiếp theo (4,5,6...). Không trùng ID cũ.</small>
+            <input id="id" type="text" placeholder="VD: 1, 2, 3..." />
+            <small>Dùng số tăng dần, không trùng ID cũ.</small>
           </div>
           <div class="field">
             <label for="slug">Slug (đường dẫn)</label>
             <input id="slug" type="text" placeholder="Sẽ tạo tự động từ tiêu đề nếu để trống" />
-            <small>Không dấu, chữ thường, gạch ngang. Ví dụ: tran-derby-kich-tinh.</small>
+            <small>Không dấu, chữ thường, gạch ngang. VD: tran-derby-kich-tinh.</small>
           </div>
         </div>
 
@@ -332,14 +332,20 @@
         </div>
 
         <div class="field">
-          <label for="video">Mã nhúng video (tuỳ chọn)</label>
-          <textarea id="video" placeholder="Dán iframe YouTube, thẻ &lt;video&gt;... nếu bài có video. Để trống nếu không dùng video."></textarea>
-          <small>Ví dụ YouTube: &lt;iframe src=&quot;https://www.youtube.com/embed/VIDEO_ID&quot; ...&gt;&lt;/iframe&gt;</small>
+          <label for="media">Danh sách mã nhúng (gallery – ảnh &amp; video, không giới hạn)</label>
+          <textarea id="media" placeholder="Dán mã nhúng &lt;img&gt;, &lt;iframe&gt; Dailymotion, &lt;video&gt;...
+Mỗi khối media cách nhau bằng 1 DÒNG TRỐNG."></textarea>
+          <small>
+            Ví dụ:<br>
+            - Ảnh: &lt;img src=&quot;images/anh1.jpg&quot; alt=&quot;Mô tả&quot; /&gt;<br>
+            - Video Dailymotion (mã embed): &lt;iframe src=&quot;https://www.dailymotion.com/embed/video/VIDEO_ID&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;<br>
+            Nhiều media: dán khối đầu, xuống 1 dòng trống, dán khối tiếp theo...
+          </small>
         </div>
 
         <div class="field">
           <label for="content">Nội dung bài</label>
-          <textarea id="content" placeholder="Mỗi dòng sẽ là 1 đoạn &lt;p&gt;...&lt;/p&gt;. Bạn chỉ cần gõ text thường."></textarea>
+          <textarea id="content" placeholder="Mỗi dòng = 1 đoạn. Hệ thống sẽ tự bọc &lt;p&gt;...&lt;/p&gt;."></textarea>
         </div>
 
         <button id="generateBtn" class="button">Tạo code bài viết</button>
@@ -383,7 +389,7 @@
     const idInput = document.getElementById("id");
     const slugInput = document.getElementById("slug");
     const summaryInput = document.getElementById("summary");
-    const videoInput = document.getElementById("video");
+    const mediaInput = document.getElementById("media");
     const contentInput = document.getElementById("content");
 
     const previewTitle = document.getElementById("previewTitle");
@@ -396,16 +402,15 @@
     const copyBtn = document.getElementById("copyBtn");
     const codeOutput = document.getElementById("codeOutput");
 
-    // Đặt ngày mặc định = hôm nay
     (function setDefaultDate() {
       const today = new Date();
       const y = today.getFullYear();
       const m = String(today.getMonth() + 1).padStart(2, "0");
       const d = String(today.getDate()).padStart(2, "0");
       dateInput.value = `${y}-${m}-${d}`;
+      updatePreview();
     })();
 
-    // Cập nhật preview khi nhập
     function updatePreview() {
       previewTitle.textContent = titleInput.value || "Tiêu đề bài viết sẽ hiện ở đây";
       previewCat.textContent = catInput.value || "Chuyên mục";
@@ -429,9 +434,9 @@
       return str
         .toLowerCase()
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // bỏ dấu
-        .replace(/[^a-z0-9\\s-]/g, "")                    // bỏ ký tự lạ
+        .replace(/[^a-z0-9\s-]/g, "")                    // bỏ ký tự lạ
         .trim()
-        .replace(/\\s+/g, "-");
+        .replace(/\s+/g, "-");
     }
 
     function formatDateDDMMYYYY(dateVal) {
@@ -454,7 +459,7 @@
       const contentRaw = contentInput.value.trim();
       let idVal = idInput.value.trim();
       let slugVal = slugInput.value.trim();
-      const videoRaw = videoInput.value.trim();
+      const mediaRaw = mediaInput.value.trim();
 
       if (!title || !summary || !contentRaw) {
         alert("Vui lòng nhập ít nhất: Tiêu đề, Mô tả ngắn và Nội dung bài.");
@@ -462,7 +467,6 @@
       }
 
       if (!idVal) {
-        // nếu không nhập id, tự tạo bằng timestamp đơn giản
         idVal = String(Date.now());
         idInput.value = idVal;
       }
@@ -475,15 +479,24 @@
       const dateFormatted = formatDateDDMMYYYY(dateVal);
 
       const paragraphs = contentRaw
-        .split("\\n")
+        .split("\n")
         .map(line => line.trim())
         .filter(line => line.length > 0)
         .map(line => `      <p>${escapeBackticks(line)}</p>`)
-        .join("\\n");
+        .join("\n");
 
       const safeTitle = title.replace(/"/g, '\\"');
       const safeSummary = summary.replace(/"/g, '\\"');
-      const safeVideo = escapeBackticks(videoRaw);
+
+      // Tách media theo KHỐI, mỗi khối cách nhau ít nhất 1 dòng trống
+      let mediaBlocks = [];
+      if (mediaRaw) {
+        mediaBlocks = mediaRaw
+          .split(/\n\s*\n/g)
+          .map(block => block.trim())
+          .filter(block => block.length > 0);
+      }
+      const safeMediaBlocks = mediaBlocks.map(block => escapeBackticks(block));
 
       const lines = [];
       lines.push("{");
@@ -493,17 +506,22 @@
       lines.push(`  date: "${dateFormatted}",`);
       lines.push(`  category: "${category}",`);
       lines.push(`  summary: "${safeSummary}",`);
-      if (safeVideo) {
-        lines.push(`  videoEmbed: \\``);
-        lines.push(`${safeVideo}`);
-        lines.push("  \\`,");
+
+      if (safeMediaBlocks.length > 0) {
+        lines.push("  mediaEmbeds: [");
+        safeMediaBlocks.forEach((block, idx) => {
+          const comma = idx === safeMediaBlocks.length - 1 ? "" : ",";
+          lines.push("    `" + block + "`" + comma);
+        });
+        lines.push("  ],");
       }
-      lines.push("  content: \\`");
+
+      lines.push("  content: `");
       lines.push(paragraphs);
-      lines.push("  \\`");
+      lines.push("  `");
       lines.push("}");
 
-      codeOutput.value = lines.join("\\n");
+      codeOutput.value = lines.join("\n");
       updatePreview();
     });
 
@@ -513,7 +531,7 @@
       contentInput.value = "";
       idInput.value = "";
       slugInput.value = "";
-      videoInput.value = "";
+      mediaInput.value = "";
       codeOutput.value = "";
       updatePreview();
     });
@@ -527,9 +545,6 @@
         .then(() => alert("Đã copy code vào clipboard!"))
         .catch(() => alert("Trình duyệt không cho copy tự động, bạn hãy tự Ctrl+C."));
     });
-
-    // Cập nhật preview ban đầu
-    updatePreview();
   </script>
 </body>
 </html>
