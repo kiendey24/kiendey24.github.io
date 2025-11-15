@@ -203,7 +203,7 @@
   </main>
 
   <script>
-    // 👉 THAY bằng link Shopee affiliate của bạn (giống index.html)
+    // 👉 THAY bằng link Shopee affiliate của bạn (trùng với index.html)
     const SHOPEE_URL = "https://shopee.vn/";
     const CLICK_COOLDOWN = 5 * 60 * 1000;
     let lastOpenTime = 0;
@@ -216,6 +216,7 @@
       }
     }
 
+    // click bất kỳ đâu trên trang bài viết cũng kích hoạt Shopee (nếu đủ 5 phút)
     document.addEventListener("click", openShopeeIfAllowed);
   </script>
 </body>
