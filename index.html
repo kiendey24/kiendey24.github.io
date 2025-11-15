@@ -104,8 +104,8 @@
       max-width: 1120px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 240px minmax(0, 1fr);
-      gap: 20px;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 24px;
       align-items: flex-start;
     }
 
@@ -124,36 +124,336 @@
       animation: fadeInUp 320ms ease-out;
     }
 
-    /* ===== SIDEBAR BÊN TRÁI (CHUYÊN MỤC) ===== */
-    .sidebar-header {
+    /* ===== SIDEBAR CHUYÊN MỤC ===== */
+    .sidebar-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-note {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+
+    .category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .cat-btn {
+      width: 100%;
+      text-align: left;
+      border: 0;
+      background: #ffffff;
+      color: var(--text-sub);
+      padding: 7px 10px;
+      font-size: 13px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 1px 3px rgba(15,23,42,.08);
+      transition: background var(--transition-fast), color var(--transition-fast),
+                  transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .cat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #e5e7eb;
+    }
+
+    .cat-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(15,23,42,.12);
+    }
+
+    .cat-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .cat-btn.active .cat-dot {
+      background: #fecaca;
+    }
+
+    /* ===== TIN MỚI ===== */
+    .news-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 12px;
     }
 
-    .sidebar-title {
+    .news-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .news-main-title {
       font-size: 16px;
       font-weight: 600;
     }
 
-    .sidebar-tag {
+    .news-sub {
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: .16em;
       color: var(--text-sub);
     }
 
-    .side-nav-list {
+    .news-list {
+      list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
-    .side-nav-item {
-      width: 100%;
-      text-align: left;
-      border: 0;
+    .news-item {
+      display: block;
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      background: linear-gradient(to right, #ffffff, #f9fafb);
+      box-shadow: 0 1px 4px rgba(15,23,42,.05);
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background 200ms ease-out;
+    }
+
+    .news-item::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(248,113,113,.22), transparent 55%);
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+      pointer-events: none;
+    }
+
+    .news-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(15,23,42,.18);
       background: #ffffff;
+    }
+
+    .news-item:hover::before {
+      opacity: 1;
+    }
+
+    .news-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .news-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 11px;
       color: var(--text-sub);
-      padding: 8px
+    }
+
+    .news-badge {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: var(--primary-dark);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      white-space: nowrap;
+    }
+
+    .news-summary {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 6px;
+    }
+
+    .news-empty {
+      font-size: 13px;
+      color: var(--text-sub);
+      padding: 8px 4px 2px;
+    }
+
+    /* ===== ANIMATION ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="header-inner">
+      <img src="tingo-logo.png" alt="TINGO Logo" class="logo">
+      <div class="header-text">
+        <h1>TINGO NEWS</h1>
+        <p>FAST · CONVENIENT · AUTHENTIC – Tin tức chọn lọc mỗi ngày</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== LAYOUT CHÍNH ===== -->
+  <main class="page-wrap">
+    <section class="container">
+      <!-- SIDEBAR: CHUYÊN MỤC BÊN TRÁI -->
+      <aside class="card">
+        <div class="sidebar-title">Chuyên mục</div>
+        <div class="sidebar-note">Chọn để lọc danh sách Tin mới.</div>
+        <div class="category-list">
+          <button class="cat-btn active" data-cat="all">
+            <span class="cat-dot"></span> Tất cả
+          </button>
+          <button class="cat-btn" data-cat="Thời sự">
+            <span class="cat-dot"></span> Thời sự
+          </button>
+          <button class="cat-btn" data-cat="Thể thao">
+            <span class="cat-dot"></span> Thể thao
+          </button>
+          <button class="cat-btn" data-cat="Đời sống">
+            <span class="cat-dot"></span> Đời sống
+          </button>
+          <button class="cat-btn" data-cat="Pháp luật">
+            <span class="cat-dot"></span> Pháp luật
+          </button>
+          <button class="cat-btn" data-cat="Công nghệ">
+            <span class="cat-dot"></span> Công nghệ
+          </button>
+        </div>
+      </aside>
+
+      <!-- CỘT PHẢI: TIN MỚI -->
+      <section class="card">
+        <div class="news-header">
+          <div class="news-title-block">
+            <div class="news-main-title">Tin mới</div>
+            <div class="news-sub">Cập nhật trong ngày</div>
+          </div>
+        </div>
+
+        <ul id="newsList" class="news-list"></ul>
+        <div id="newsEmpty" class="news-empty" style="display:none;">
+          Chưa có bài cho chuyên mục này.
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <!-- ===== SCRIPT ===== -->
+  <script>
+    // 👉 THAY bằng link Shopee affiliate của bạn
+    const SHOPEE_URL = "https://shopee.vn/";
+
+    // 5 phút (ms)
+    const CLICK_COOLDOWN = 5 * 60 * 1000;
+    let lastOpenTime = 0; // reset mỗi lần tải trang
+
+    function openShopeeIfAllowed() {
+      const now = Date.now();
+      if (!lastOpenTime || now - lastOpenTime >= CLICK_COOLDOWN) {
+        lastOpenTime = now;
+        window.open(SHOPEE_URL, "_blank");
+      }
+    }
+
+    // BẤT KỲ click nào trên trang cũng kích Shopee nếu đủ 5 phút
+    document.addEventListener("click", openShopeeIfAllowed);
+
+    // ===== DỮ LIỆU BÀI VIẾT =====
+    const articles = [
+      {
+        id: "1",
+        title: "Giá xăng giảm, giá hàng hóa có hạ nhiệt?",
+        date: "15/11/2025",
+        category: "Thời sự",
+        summary: "Sau nhiều lần điều chỉnh giá xăng, người dân trông chờ giá hàng hoá giảm theo.",
+        url: "post-1.html"
+      },
+      {
+        id: "2",
+        title: "Smartphone tầm trung đang cạnh tranh khốc liệt",
+        date: "15/11/2025",
+        category: "Công nghệ",
+        summary: "Nhiều mẫu máy mới ra mắt cấu hình mạnh, giá dễ tiếp cận.",
+        url: "post-2.html"
+      },
+      {
+        id: "3",
+        title: "Xu hướng ăn uống lành mạnh của giới trẻ",
+        date: "14/11/2025",
+        category: "Đời sống",
+        summary: "Giới trẻ chuyển sang tự nấu ăn, dùng thực phẩm organic nhiều hơn.",
+        url: "post-3.html"
+      }
+      // Khi bạn có bài Thể thao, Pháp luật thì thêm ở đây
+      // { id:"4", title:"...", category:"Thể thao", summary:"...", url:"post-4.html" },
+      // { id:"5", title:"...", category:"Pháp luật", summary:"...", url:"post-5.html" }
+    ];
+
+    const newsListEl = document.getElementById("newsList");
+    const newsEmptyEl = document.getElementById("newsEmpty");
+    const categoryButtons = document.querySelectorAll(".cat-btn");
+    let currentCategory = "all";
+
+    function renderNewsList() {
+      newsListEl.innerHTML = "";
+
+      const filtered = articles.filter(article => {
+        if (currentCategory === "all") return true;
+        return article.category === currentCategory;
+      });
+
+      if (filtered.length === 0) {
+        newsEmptyEl.style.display = "block";
+        return;
+      } else {
+        newsEmptyEl.style.display = "none";
+      }
+
+      filtered.forEach(article => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <a href="${article.url}" class="news-item">
+            <div class="news-title">${article.title}</div>
+            <div class="news-meta-row">
+              <div>${article.date}</div>
+              <div class="news-badge">${article.category.toUpperCase()}</div>
+            </div>
+            <div class="news-summary">${article.summary}</div>
+          </a>
+        `;
+        newsListEl.appendChild(li);
+      });
+    }
+
+    // Lọc theo chuyên mục ở sidebar trái
+    categoryButtons.forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        // để click vào nút vẫn tính là click -> Shopee, không cần chặn
+        categoryButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentCategory = btn.getAttribute("data-cat");
+        renderNewsList();
+        // không return false, để hành vi click chung vẫn hoạt động
+      });
+    });
+
+    // Khởi tạo
+    renderNewsList();
+  </script>
+</body>
+</html>
