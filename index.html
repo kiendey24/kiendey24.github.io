@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>TINGO Auto Shopee Redirect</title>
+  <title>TINGO NEWS - Fast · Convenient · Authentic</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Font -->
@@ -13,9 +13,15 @@
   <style>
     :root {
       --primary: #d32f2f;
+      --primary-dark: #b71c1c;
       --accent: #f97316;
-      --bg: #0f172a;
-      --text: #e5e7eb;
+      --bg: #f3f4f6;
+      --text-main: #111827;
+      --text-sub: #6b7280;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --shadow-soft: 0 16px 40px rgba(15,23,42,.12);
+      --transition-fast: 180ms ease-out;
     }
 
     * {
@@ -26,209 +32,92 @@
 
     body {
       font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1f2937 0, #020617 55%, #000 100%);
-      color: var(--text);
+      background: radial-gradient(circle at top left, #fee2e2 0, #f3f4f6 45%, #e5e7eb 100%);
+      color: var(--text-main);
+      line-height: 1.6;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
     }
 
-    .card {
-      width: 100%;
-      max-width: 420px;
-      background: rgba(15,23,42,.96);
-      border-radius: 20px;
-      border: 1px solid rgba(148,163,184,.4);
-      box-shadow: 0 24px 60px rgba(15,23,42,.9);
-      padding: 20px 18px 18px;
-      text-align: center;
+    /* ===== HEADER ===== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.96);
+      border-bottom: 1px solid rgba(209,213,219,.7);
+    }
+
+    .header-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 10px 16px 8px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
     .logo-wrap {
       display: flex;
+      align-items: center;
       justify-content: center;
-      margin-bottom: 10px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: linear-gradient(to right, #fee2e2, #e0f2fe);
+      box-shadow: 0 8px 20px rgba(248,113,113,.35);
     }
 
     .logo {
+      height: 44px;
       max-width: 220px;
-      max-height: 60px;
+      display: block;
     }
 
-    .title {
-      font-size: 18px;
-      letter-spacing: .16em;
+    .header-text h1 {
+      font-size: 22px;
+      letter-spacing: .12em;
       text-transform: uppercase;
-      margin-bottom: 4px;
     }
 
-    .subtitle {
+    .header-text p {
       font-size: 12px;
-      color: #9ca3af;
-      margin-bottom: 16px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      margin-top: 3px;
     }
 
-    .countdown-number {
-      font-size: 40px;
-      font-weight: 700;
-      margin-bottom: 4px;
-      color: var(--accent);
+    @media (max-width: 640px) {
+      .logo {
+        height: 34px;
+      }
+      .header-text h1 {
+        font-size: 18px;
+      }
+      .header-inner {
+        justify-content: center;
+      }
     }
 
-    .countdown-label {
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
-
-    .status {
-      font-size: 12px;
-      color: #9ca3af;
-      margin-bottom: 14px;
-      min-height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .btn-row {
+    /* ===== THANH CHUYÊN MỤC ===== */
+    .category-bar {
       display: flex;
       justify-content: center;
       gap: 8px;
-      margin-bottom: 6px;
+      flex-wrap: wrap;
+      padding: 8px 16px 12px;
+      border-top: 1px solid rgba(229,231,235,.9);
+      border-bottom: 1px solid rgba(229,231,235,.9);
+      background: radial-gradient(circle at top, #fee2e2 0, #ffffff 55%);
     }
 
-    .btn {
-      flex: 1;
-      padding: 8px 12px;
-      border-radius: 999px;
+    .cat-btn {
       border: 0;
+      background: #ffffff;
+      color: var(--text-sub);
+      padding: 6px 14px;
       font-size: 13px;
+      border-radius: 999px;
       cursor: pointer;
-      transition: transform 160ms ease-out, box-shadow 160ms ease-out, background 160ms ease-out;
-    }
-
-    .btn-primary {
-      background: linear-gradient(to right, var(--accent), #fb923c);
-      color: #fff;
-      box-shadow: 0 12px 28px rgba(248,113,113,.45);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 18px 34px rgba(248,113,113,.55);
-    }
-
-    .note {
-      font-size: 11px;
-      color: #6b7280;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="card">
-    <div class="logo-wrap">
-      <!-- Đảm bảo file tingo-logo.png nằm cùng thư mục với index.html -->
-      <img src="tingo-logo.png" alt="TINGO Logo" class="logo">
-    </div>
-    <div class="title">TINGO AUTO</div>
-    <div class="subtitle">TỰ ĐỘNG CHUYỂN SANG ƯU ĐÃI SHOPEE</div>
-
-    <div class="countdown-number" id="countdown">-</div>
-    <div class="countdown-label">giây nữa sẽ mở Shopee</div>
-
-    <div class="status" id="statusText">
-      Đang kiểm tra thời gian chuyển tiếp gần nhất...
-    </div>
-
-    <div class="btn-row">
-      <button id="openNowBtn" class="btn btn-primary">
-        Mở Shopee ngay
-      </button>
-    </div>
-
-    <div class="note">
-      Hệ thống tự động lặp lại tối đa <strong>1 lần mỗi 2 phút</strong> trên cùng trình duyệt.
-    </div>
-  </div>
-
-  <script>
-    // 👉 THAY link này bằng link Shopee affiliate của bạn
-    const SHOPEE_URL = "https://shopee.vn/";
-
-    const COUNTDOWN_SECONDS = 3;           // Đếm ngược 3 giây
-    const INTERVAL_MS = 2 * 60 * 1000;     // Lặp lại mỗi 2 phút
-    const STORAGE_KEY = "tingo_last_redirect";
-
-    const countdownEl = document.getElementById("countdown");
-    const statusEl = document.getElementById("statusText");
-    const openNowBtn = document.getElementById("openNowBtn");
-
-    let countdownTimer = null;
-    let waitTimer = null;
-
-    function openShopee() {
-      // Lưu thời gian chuyển gần nhất
-      localStorage.setItem(STORAGE_KEY, Date.now().toString());
-      // Mở Shopee trong tab mới
-      window.open(SHOPEE_URL, "_blank");
-    }
-
-    function startCountdown() {
-      clearInterval(countdownTimer);
-      let remain = COUNTDOWN_SECONDS;
-
-      countdownEl.textContent = remain.toString();
-      statusEl.textContent = "Đang chuẩn bị chuyển đến ưu đãi Shopee...";
-
-      countdownTimer = setInterval(() => {
-        remain--;
-        countdownEl.textContent = remain.toString();
-        if (remain <= 0) {
-          clearInterval(countdownTimer);
-          openShopee();
-          scheduleNextLoop();
-        }
-      }, 1000);
-    }
-
-    function scheduleNextLoop() {
-      clearTimeout(waitTimer);
-
-      const last = parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10);
-      const now = Date.now();
-      const diff = now - last;
-      const remainMs = INTERVAL_MS - diff;
-
-      if (!last || remainMs <= 0) {
-        // Đủ điều kiện chạy ngay
-        startCountdown();
-        return;
-      }
-
-      // Còn thời gian chờ trước khi được chạy lại
-      const remainSec = Math.ceil(remainMs / 1000);
-      countdownEl.textContent = "-";
-      statusEl.textContent =
-        "Đã chuyển tiếp trong " +
-        "2 phút gần đây. Lần đếm ngược tiếp theo sẽ bắt đầu sau " +
-        remainSec +
-        " giây.";
-
-      waitTimer = setTimeout(scheduleNextLoop, remainMs);
-    }
-
-    // Mở ngay khi bấm nút
-    openNowBtn.addEventListener("click", () => {
-      openShopee();
-      scheduleNextLoop();
-    });
-
-    // Khởi động
-    scheduleNextLoop();
-  </script>
-</body>
-</html>
+      displ
