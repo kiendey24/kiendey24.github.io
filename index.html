@@ -58,19 +58,9 @@
       flex-wrap: wrap;
     }
 
-    .logo-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: linear-gradient(to right, #fee2e2, #e0f2fe);
-      box-shadow: 0 8px 20px rgba(248,113,113,.35);
-    }
-
     .logo {
-      height: 44px;
-      max-width: 220px;
+      height: 80px;
+      max-width: 100%;
       display: block;
     }
 
@@ -89,14 +79,19 @@
     }
 
     @media (max-width: 640px) {
-      .logo {
-        height: 34px;
+      .header-inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
       }
+
+      .logo {
+        height: 60px;
+        margin-bottom: 4px;
+      }
+
       .header-text h1 {
         font-size: 18px;
-      }
-      .header-inner {
-        justify-content: center;
       }
     }
 
@@ -437,10 +432,8 @@
   <!-- ===== HEADER ===== -->
   <header>
     <div class="header-inner">
-      <div class="logo-wrap">
-        <!-- LOGO: tingo-logo.png -->
-        <img src="tingo-logo.png" alt="TINGO Logo" class="logo">
-      </div>
+      <!-- Logo lớn, không boxed -->
+      <img src="tingo-logo.png" alt="TINGO Logo" class="logo">
       <div class="header-text">
         <h1>TINGO NEWS</h1>
         <p>FAST · CONVENIENT · AUTHENTIC – Tin tức chọn lọc mỗi ngày</p>
@@ -482,8 +475,7 @@
       <article class="card">
         <div id="articleContent">
           <p class="placeholder">
-            Chọn một bài ở cột <span>Tin mới</span> để xem nội dung.  
-            Khi vào trang, hệ thống sẽ tự mở ưu đãi Shopee sau vài giây (lặp tối đa 1 lần mỗi 2 phút).
+            Chọn một bài ở cột <span>Tin mới</span> để xem nội dung.
           </p>
         </div>
       </article>
@@ -495,10 +487,10 @@
     <div class="ad-box">
       <img src="tingo-logo.png" alt="TINGO Logo" class="ad-logo">
       <div class="ad-title">TINGO AUTO</div>
-      <div class="ad-subtitle">TỰ ĐỘNG CHUYỂN SANG ƯU ĐÃI SHOPEE</div>
+      <div class="ad-subtitle">ĐANG CHUẨN BỊ MỞ ƯU ĐÃI</div>
 
       <div id="adCountNumber" class="ad-count-number">-</div>
-      <div class="ad-count-label">giây nữa sẽ mở Shopee</div>
+      <div class="ad-count-label">giây nữa sẽ mở trang ưu đãi</div>
 
       <div id="adStatus" class="ad-status">
         Đang kiểm tra lần chuyển gần nhất...
@@ -506,7 +498,7 @@
 
       <div class="ad-button-row">
         <button id="adOpenNow" class="ad-button ad-primary">
-          Mở Shopee ngay
+          Mở ngay
         </button>
       </div>
 
@@ -518,7 +510,7 @@
 
   <!-- ===== SCRIPT ===== -->
   <script>
-    /* ===== CẤU HÌNH AFFILIATE =====
+    /* ===== CẤU HÌNH LINK ĐÍCH =====
        TODO: sửa link này thành link Shopee affiliate của bạn */
     const SHOPEE_URL = "https://shopee.vn/";
     const COUNTDOWN_SECONDS = 3;                // đếm ngược 3 giây
@@ -552,7 +544,7 @@
       let remain = COUNTDOWN_SECONDS;
 
       adCountNumber.textContent = remain.toString();
-      adStatus.textContent = "Đang chuẩn bị chuyển tới ưu đãi Shopee...";
+      adStatus.textContent = "";
 
       countdownTimer = setInterval(() => {
         remain--;
@@ -584,8 +576,7 @@
       const remainSec = Math.ceil(remainMs / 1000);
       adCountNumber.textContent = "-";
       adStatus.textContent =
-        "Đã chuyển tới Shopee trong 2 phút gần đây. Đếm ngược lần tiếp theo sẽ bắt đầu sau " +
-        remainSec + " giây.";
+        "Hệ thống sẽ tự mở lại sau " + remainSec + " giây.";
 
       hideOverlay(); // cho user đọc tin, chỉ hiện lại khi sắp mở
       waitTimer = setTimeout(startCountdown, remainMs);
@@ -710,7 +701,7 @@
         articleContentEl.innerHTML = `
           <p class="placeholder">
             Chọn một bài viết trong chuyên mục
-            <span>${currentCategory === 'all' ? 'Tất cả' : currentCategory}</span> để đọc.
+            <span>${currentCategory === 'all' ? 'Tất cả' : currentCategory}</span> để xem.
           </p>
         `;
 
